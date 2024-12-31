@@ -16,7 +16,7 @@ This repository serves as both a **knowledge base** (docs) and a collection of *
 Over my years as a .NET engineer, I’ve been inspired by the structured approach of Clean Architecture and the simplicity of Vertical Slice Architecture. I often found myself blending the two approaches into something that worked better for my projects—something I now call **Clean Cut Architecture**.
 
 <p align="center">
-   <img src="/clean-cut-architecture-graphic.png" width="75%">
+   <img src="/clean-cut-architecture-graphic.png" width="85%">
 </p>
 
 Clean Cut Architecture aims to:
@@ -25,6 +25,14 @@ Clean Cut Architecture aims to:
 - Focus on **use case-driven development**.
 - Provide **cohesive slices** that bring together domain logic, infrastructure, and presentation.
 - Balance **simplicity** and **scalability**, allowing systems to grow without unnecessary complexity.
+
+## Architecture Workflow
+
+Clean Cut Architecture aims to standarize the system's workflow. This workflow keeps the focus on the Use Case, with it being the entry point into the Application's business rules and orchestrating the necessary components to accomplish it's goal. Every use case will use different specially tailored components for the use case itself. These components can be of many types - including but not limited to Domain, Abstraction and Infrastructure.
+
+<p align="center">
+   <img src="/architecture-workflow.png" width="85%">
+</p>
 
 ## What is in this Repo?
 
