@@ -36,39 +36,40 @@ Clean Cut Architecture aims to standarize the system's workflow. This workflow k
 
 Here is how the flow is structured:
 
-### Consumers
+#### Consumers
 
 External consumers, such as microservices, mobile applications, or frontend clients, initiate interactions with the system. These consumers communicate through HTTP endpoints, message brokers, or other defined interfaces.
 
-### Presentation Component
+#### Presentation Component
 
 - Acts as the entry point for all incoming requests.
 - Responsible for routing the requests to the appropriate Application Layer components.
 - Handles communication protocols like HTTP and message queues, ensuring inputs and outputs are properly formatted.
 
-### Use Case
+#### Use Case ⭐
 
-- Acts as the entry point for all incoming requests.
-- Responsible for routing the requests to the appropriate Application Layer components.
-- Handles communication protocols like HTTP and message queues, ensuring inputs and outputs are properly formatted.
+- Serves as the orchestrator for business logic execution.
+- Represents a distinct **feature** or **action** that the application supports, modeled as a verb (e.g., "Process Order", "Finalize Payment", "Send Notification").
+- Each use case encapsulates the application's behavior in a modular, testable, and reusable way, and operates independently, making it easy to test in isolation.
+- It is responsible for managing all operations necessary to fullfil its purpose. It is **highly cohesive** and keeps all the related components together.
 
-### Domain
+#### Domain
 
 - Encapsulates core business rules and domain entities.
 - Remains isolated from infrastructure or external dependencies to ensure pure, reusable logic.
 
-### Abstraction
+#### Abstraction
 
 - Provides interfaces for interacting with infrastructure components like databases, services, or external APIs.
 - Defines contracts (e.g., repositories, gateways) that the Application Layer depends upon.
 
-### Infrastructure
+#### Infrastructure
 
 - Implements the contracts defined in the abstraction layer.
 - Responsible for direct interactions with databases, external systems, email connectors, or message brokers.
 - Provides the actual functionality for storing data, sending messages, or interacting with external APIs.
 
-### Shared
+#### Shared
 
 - Contains cross-cutting concerns and reusable components such as error types, service bus abstractions, and shared DTOs.
 - Ensures consistency and reduces duplication across the system.
