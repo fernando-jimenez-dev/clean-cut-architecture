@@ -1,6 +1,6 @@
 <h1 align="center">Clean Cut Architecture</h1>
 <h3 align="center">Templates</h3>
-<p align="center">v.0.1.0-alpha</p>
+<p align="center">v.0.1.1-alpha</p>
 
 ---
 
