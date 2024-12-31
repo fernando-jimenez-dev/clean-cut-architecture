@@ -56,16 +56,18 @@ External consumers, such as microservices, mobile applications, or frontend clie
 #### Domain
 
 - Encapsulates core business rules and domain entities.
+- Aims to support cases where Domain Logic is complex and heavy in behavior.
 - Remains isolated from infrastructure or external dependencies to ensure pure, reusable logic.
 
 #### Abstraction
 
+- Separates the Use Case and Domain logics from infrastructure and shared components. This approach helps **invert responsabilities** and having our Use Cases not depend on Concrete Components.
 - Provides interfaces for interacting with infrastructure components like databases, services, or external APIs.
 - Defines contracts (e.g., repositories, gateways) that the Application Layer depends upon.
 
 #### Infrastructure
 
-- Implements the contracts defined in the abstraction layer.
+- Implements the contracts defined in the abstraction layer by the that requires them.
 - Responsible for direct interactions with databases, external systems, email connectors, or message brokers.
 - Provides the actual functionality for storing data, sending messages, or interacting with external APIs.
 
@@ -73,6 +75,7 @@ External consumers, such as microservices, mobile applications, or frontend clie
 
 - Contains cross-cutting concerns and reusable components such as error types, service bus abstractions, and shared DTOs.
 - Ensures consistency and reduces duplication across the system.
+- Components living here must be reusable by nature, and more than one use case requires access to it. Avoid temptation on putting everything here upfront - rather prefer to organize your components inside the Use Case **first** and then look for patterns that suggest a specific component is **indeed duplicated** among use cases.
 
 ## What is in this Repo?
 
