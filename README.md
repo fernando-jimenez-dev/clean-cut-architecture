@@ -34,6 +34,45 @@ Clean Cut Architecture aims to standarize the system's workflow. This workflow k
    <img src="/architecture-workflow.png" width="85%">
 </p>
 
+Here is how the flow is structured:
+
+### Consumers
+
+External consumers, such as microservices, mobile applications, or frontend clients, initiate interactions with the system. These consumers communicate through HTTP endpoints, message brokers, or other defined interfaces.
+
+### Presentation Component
+
+- Acts as the entry point for all incoming requests.
+- Responsible for routing the requests to the appropriate Application Layer components.
+- Handles communication protocols like HTTP and message queues, ensuring inputs and outputs are properly formatted.
+
+### Use Case
+
+- Acts as the entry point for all incoming requests.
+- Responsible for routing the requests to the appropriate Application Layer components.
+- Handles communication protocols like HTTP and message queues, ensuring inputs and outputs are properly formatted.
+
+### Domain
+
+- Encapsulates core business rules and domain entities.
+- Remains isolated from infrastructure or external dependencies to ensure pure, reusable logic.
+
+### Abstraction
+
+- Provides interfaces for interacting with infrastructure components like databases, services, or external APIs.
+- Defines contracts (e.g., repositories, gateways) that the Application Layer depends upon.
+
+### Infrastructure
+
+- Implements the contracts defined in the abstraction layer.
+- Responsible for direct interactions with databases, external systems, email connectors, or message brokers.
+- Provides the actual functionality for storing data, sending messages, or interacting with external APIs.
+
+### Shared
+
+- Contains cross-cutting concerns and reusable components such as error types, service bus abstractions, and shared DTOs.
+- Ensures consistency and reduces duplication across the system.
+
 ## What is in this Repo?
 
 ### Documentation
