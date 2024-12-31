@@ -5,7 +5,7 @@
 ---
 
 > [!WARNING]
-> This documentation is a **work in progress** and currently in its **alpha** stage (`v0.1.0-alpha`). Expect incomplete sections, evolving content, and potential changes in structure. Feedback and suggestions are welcome as we refine the material.
+> This documentation is a **work in progress** and currently in its **alpha** stage (`v0.1.1-alpha`). Expect incomplete sections, evolving content, and potential changes in structure. Feedback and suggestions are welcome as we refine the material.
 
 Welcome to the **Documentation Hub** for Clean Cut Architecture! This directory is the go-to place for understanding the principles, practices, and guidelines that form the foundation of CCA.
 
