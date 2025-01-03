@@ -2,6 +2,6 @@
 
 namespace Application.UseCases.CheckPulse.Abstractions;
 
-internal interface ICheckPulseUseCase : IUseCase<string, CheckPulseUseCaseOutput>
+public interface ICheckPulseUseCase : IUseCase<string, CheckPulseUseCaseOutput>
 {
 }

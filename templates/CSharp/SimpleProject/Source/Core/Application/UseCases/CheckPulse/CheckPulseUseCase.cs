@@ -1,5 +1,4 @@
 ﻿using Application.UseCases.CheckPulse.Abstractions;
-using Application.UseCases.CheckPulse.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace Application.UseCases.CheckPulse;

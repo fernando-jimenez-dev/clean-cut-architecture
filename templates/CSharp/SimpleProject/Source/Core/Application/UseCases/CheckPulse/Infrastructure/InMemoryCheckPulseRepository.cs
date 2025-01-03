@@ -1,4 +1,6 @@
-﻿namespace Application.UseCases.CheckPulse.Infrastructure;
+﻿using Application.UseCases.CheckPulse.Abstractions;
+
+namespace Application.UseCases.CheckPulse.Infrastructure;
 
 public class InMemoryCheckPulseRepository : ICheckPulseRepository
 {

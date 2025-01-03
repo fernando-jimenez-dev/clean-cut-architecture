@@ -1,4 +1,4 @@
-﻿namespace Application.UseCases.CheckPulse.Infrastructure;
+﻿namespace Application.UseCases.CheckPulse.Abstractions;
 
 public interface ICheckPulseRepository
 {

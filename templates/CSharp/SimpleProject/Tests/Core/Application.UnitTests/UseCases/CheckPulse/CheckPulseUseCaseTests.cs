@@ -1,5 +1,5 @@
 ﻿using Application.UseCases.CheckPulse;
-using Application.UseCases.CheckPulse.Infrastructure;
+using Application.UseCases.CheckPulse.Abstractions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
