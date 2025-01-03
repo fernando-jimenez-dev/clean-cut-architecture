@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.CheckPulse;
 using Application.UseCases.CheckPulse.Infrastructure;
-using FluentResults;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
@@ -25,27 +24,13 @@ public class CheckPulseUseCaseTests
         string[] goodVitals = ["All", "Good!"];
         checkPulseRepository
             .RetrieveVitalReadings()
-            .Returns(Result.Ok(goodVitals));
+            .Returns(goodVitals);
 
         var input = "Test message";
-        var useCaseResult = await checkPulseUseCase.Run(input);
+        var useCaseOutput = await checkPulseUseCase.Run(input);
 
-        Assert.True(useCaseResult.IsSuccess);
+        Assert.True(useCaseOutput.IsSuccess);
         await checkPulseRepository.Received(1).SaveNewVitalCheck();
-    }
-
-    [Fact]
-    public async Task ShouldFailWhenVitalsWereNotRetrieved()
-    {
-        checkPulseRepository
-            .RetrieveVitalReadings()
-            .Returns(Result.Fail("Could not get vitals for now."));
-
-        var input = "Test message";
-        var useCaseResult = await checkPulseUseCase.Run(input);
-
-        Assert.True(useCaseResult.IsFailed);
-        await checkPulseRepository.DidNotReceive().SaveNewVitalCheck();
     }
 
     [Fact]
@@ -54,12 +39,12 @@ public class CheckPulseUseCaseTests
         var emptyVitals = Array.Empty<string>();
         checkPulseRepository
             .RetrieveVitalReadings()
-            .Returns(Result.Ok(emptyVitals));
+            .Returns(emptyVitals);
 
         var input = "Test message";
-        var useCaseResult = await checkPulseUseCase.Run(input);
+        var useCaseOutput = await checkPulseUseCase.Run(input);
 
-        Assert.True(useCaseResult.IsFailed);
+        Assert.False(useCaseOutput.IsSuccess);
         await checkPulseRepository.DidNotReceive().SaveNewVitalCheck();
     }
 }

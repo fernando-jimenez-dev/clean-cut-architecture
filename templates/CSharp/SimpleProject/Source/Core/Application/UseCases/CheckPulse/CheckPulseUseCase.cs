@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.CheckPulse.Abstractions;
 using Application.UseCases.CheckPulse.Infrastructure;
-using FluentResults;
 using Microsoft.Extensions.Logging;
 
 namespace Application.UseCases.CheckPulse;
@@ -25,17 +24,17 @@ public class CheckPulseUseCase : ICheckPulseUseCase
         this.checkPulseRepository = checkPulseRepository;
     }
 
-    public async Task<Result> Run(string input, CancellationToken cancellationToken = default)
+    public async Task<CheckPulseUseCaseOutput> Run(string input, CancellationToken cancellationToken = default)
     {
-        var retrieveVitalsResult = await checkPulseRepository.RetrieveVitalReadings(cancellationToken);
-        if (retrieveVitalsResult.IsSuccess && retrieveVitalsResult.Value.Length > 0)
+        var vitalReadings = await checkPulseRepository.RetrieveVitalReadings(cancellationToken);
+        if (vitalReadings.Length > 0)
         {
             logger.LogInformation("We are up and running! Here is your input: {}", input);
             await checkPulseRepository.SaveNewVitalCheck();
-            return Result.Ok();
+            return new CheckPulseUseCaseOutput(IsSuccess: true);
         }
 
-        logger.LogError("There was an error while reading vitals. Vital readings result: {}", retrieveVitalsResult);
-        return Result.Fail("Failed to read any vitals!");
+        logger.LogError("We could not find any vitals.");
+        return new CheckPulseUseCaseOutput(IsSuccess: false, ErrorMessage: "Vitals were empty!");
     }
 }

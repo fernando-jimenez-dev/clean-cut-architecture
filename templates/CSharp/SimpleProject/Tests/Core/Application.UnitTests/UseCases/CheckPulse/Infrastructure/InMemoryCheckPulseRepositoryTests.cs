@@ -14,18 +14,9 @@ public class InMemoryCheckPulseRepositoryTests
     [Fact]
     public async Task RetrieveVitalReadings_ShouldGetStoredVitals()
     {
-        var retrieveVitalsResult = await repository.RetrieveVitalReadings();
+        var vitals = await repository.RetrieveVitalReadings();
 
-        Assert.True(retrieveVitalsResult.IsSuccess);
-        Assert.Equal("All", retrieveVitalsResult.Value[0]);
-        Assert.Equal("Good", retrieveVitalsResult.Value[1]);
-    }
-
-    [Fact]
-    public async Task SaveNewVitalCheck_ShouldSaveAndSucceed()
-    {
-        var savingResult = await repository.SaveNewVitalCheck();
-
-        Assert.True(savingResult.IsSuccess);
+        Assert.Equal("All", vitals[0]);
+        Assert.Equal("Good", vitals[1]);
     }
 }

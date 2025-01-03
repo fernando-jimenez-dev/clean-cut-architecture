@@ -1,9 +1,7 @@
-﻿using FluentResults;
-
-namespace Application.Shared.Abstractions.UseCase;
+﻿namespace Application.Shared.Abstractions.UseCase;
 
 /// <summary>
-/// Represents a use case that performs an action and returns a <see cref="Result"/>.
+/// Represents a use case that performs an action.
 /// </summary>
 public interface IUseCase
 {
@@ -11,12 +9,12 @@ public interface IUseCase
     /// Executes the use case.
     /// </summary>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the execution <see cref="Result"/>.</returns>
-    Task<Result> Run(CancellationToken cancellationToken = default);
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task Run(CancellationToken cancellationToken = default);
 }
 
 /// <summary>
-/// Represents a use case that takes an input, performs an action, and returns a <see cref="Result"/> containing an output.
+/// Represents a use case that takes an input, performs an action, and returns an output.
 /// </summary>
 /// <typeparam name="TUseCaseInput">The type of the use case input.</typeparam>
 /// <typeparam name="TUseCaseOutput">The type of the use case output.</typeparam>
@@ -27,12 +25,12 @@ public interface IUseCase<in TUseCaseInput, TUseCaseOutput>
     /// </summary>
     /// <param name="input">The input for the use case.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the execution <see cref="Result"/> and the output.</returns>
-    Task<Result<TUseCaseOutput>> Run(TUseCaseInput input, CancellationToken cancellationToken = default);
+    /// <returns>A task that represents the asynchronous operation. The task result contains the execution output.</returns>
+    Task<TUseCaseOutput> Run(TUseCaseInput input, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
-/// Represents a use case that takes an input, performs an action, and returns a <see cref="Result"/>.
+/// Represents a use case that takes an input and performs an action.
 /// </summary>
 /// <typeparam name="TUseCaseInput">The type of the use case input.</typeparam>
 public interface IUseCase<in TUseCaseInput>
@@ -42,6 +40,6 @@ public interface IUseCase<in TUseCaseInput>
     /// </summary>
     /// <param name="input">The input for the use case.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the execution <see cref="Result"/>.</returns>
-    Task<Result> Run(TUseCaseInput input, CancellationToken cancellationToken = default);
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task Run(TUseCaseInput input, CancellationToken cancellationToken = default);
 }
