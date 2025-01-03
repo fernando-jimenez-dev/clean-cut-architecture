@@ -89,10 +89,8 @@ The `/docs` folder contains:
 
 ### Templates and Examples
 
-The `/templates` folder provides:
-
-- A **starter project template** with a basic CCA setup.
-- **Examples** of common patterns and use cases implemented in CCA.
+The `/templates` folder provides a **starter project template** with basic CCA setup.
+The `/examples` folder provides **real-world like examples** with different flavors of CCA implemented under different circumstances.
 
 ## Getting Started
 
@@ -114,7 +112,7 @@ Check out the `/templates` folder for project setups you can adapt to your own u
 
 - ☑️ Set up repository and first ReadMe.
 - ☐ Initial documentation on principles and concepts.
-- ☐ Add a starter project template.
+- ☑️ Add a starter project template.
 - ☐ Provide more real-world examples.
 - ☐ Create guides for integrating CCA into existing systems.
 - ☐ Open the project for community feedback and contributions.

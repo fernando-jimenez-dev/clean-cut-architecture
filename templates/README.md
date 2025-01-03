@@ -11,6 +11,6 @@ This directory contains practical templates to help you kickstart your journey w
 
 ## Templates Included
 
-1. **Basic Project Template**:
+1. **Simple Template**:
    - A minimal starting point for new projects.
    - Includes sample directories and files following the CCA structure.
