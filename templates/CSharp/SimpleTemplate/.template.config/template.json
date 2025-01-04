@@ -13,8 +13,8 @@
   ],
   "name": "Clean Cut Architecture Template",
   "identity": "CleanCutArchitecture.Template",
-  "shortName": "clean-cut-architecture",
-  "sourceName": "SimplTemplate",
+  "shortName": ["clean-cut-architecture", "cca"],
+  "sourceName": "SimpleTemplate",
   "preferNameDirectory": true,
   "tags": {
     "language": "C#",
