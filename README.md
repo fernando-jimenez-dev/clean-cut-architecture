@@ -3,9 +3,9 @@
 
 <p align="center">
    Let's build something clean, simple and effective—one slice at the time!
+   <br/>
+   <strong><i><u>0.1.2-alpha</u></i></strong>
 </p>
-
----
 
 Clean Cut Architecture (CCA) is an evolving approach that blends the principles of **Clean Architecture** and **Vertical Slice Architecture** to achieve **clarity**, **simplicity**, and a focus on **business intent**.
 
@@ -89,10 +89,8 @@ The `/docs` folder contains:
 
 ### Templates and Examples
 
-The `/templates` folder provides:
-
-- A **starter project template** with a basic CCA setup.
-- **Examples** of common patterns and use cases implemented in CCA.
+The `/templates` folder provides a **starter project template** with basic CCA setup.
+The `/examples` folder provides **real-world like examples** with different flavors of CCA implemented under different circumstances.
 
 ## Getting Started
 
@@ -114,7 +112,7 @@ Check out the `/templates` folder for project setups you can adapt to your own u
 
 - ☑️ Set up repository and first ReadMe.
 - ☐ Initial documentation on principles and concepts.
-- ☐ Add a starter project template.
+- ☑️ Add a starter project template.
 - ☐ Provide more real-world examples.
 - ☐ Create guides for integrating CCA into existing systems.
 - ☐ Open the project for community feedback and contributions.
@@ -122,3 +120,7 @@ Check out the `/templates` folder for project setups you can adapt to your own u
 ## Contributing
 
 For now, this repository is a **work in progress**, but feel free to open issues for suggestions or ideas. Contributions will be welcomed in the future.
+
+---
+
+<h6 align="center">0.1.2-alpha</h6>

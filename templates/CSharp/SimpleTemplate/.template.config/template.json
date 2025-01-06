@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Fernando Jiménez",
+  "classifications": [
+    "CCA",
+    "UseCase",
+    "Clean",
+    "Web",
+    "API",
+    "Console",
+    "Blank",
+    "Solution"
+  ],
+  "name": "Clean Cut Architecture Template",
+  "identity": "CleanCutArchitecture.Template",
+  "shortName": ["clean-cut-architecture", "cca"],
+  "sourceName": "SimpleTemplate",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  }
+}
