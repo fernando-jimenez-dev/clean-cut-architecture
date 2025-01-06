@@ -39,11 +39,11 @@ Customize the infrastructure layer to fit your project’s dependencies, databas
 Transform this project into a reusable .NET template to accelerate your development workflow:
 
 **1. Pack the template**
-Open your terminal on the root directory of the solution and run:
+Open your terminal and run:
 
-`dotnet new --install .`
+`dotnet new install CleanCutArchitectureTemplate -force`
 
-This will make install the solution structure as a template for you to use from the dotnet CLI or the Wizard.
+This will install the solution structure as a template for you to use from the dotnet CLI or the Wizard.
 
 **2. Use the template**
 Open your terminal on the location you want to start your new solution that uses CCA, and run (replace YourSolutionName with the actual name of your solution):
