@@ -9,7 +9,7 @@
 
 Clean Cut Architecture (CCA) is an evolving approach that blends the principles of **Clean Architecture** and **Vertical Slice Architecture** to achieve **clarity**, **simplicity**, and a focus on **business intent**.
 
-This repository serves as both a **knowledge base** (docs) and a collection of **practical templates and examples** for implementing CCA in your projects.
+This repository serves as both a **knowledge base** (documentation) and a collection of **practical templates and examples** for implementing CCA in your projects.
 
 ## Why Clean Cut
 
@@ -81,16 +81,12 @@ External consumers, such as microservices, mobile applications, or frontend clie
 
 ### Documentation
 
-The `/docs` folder contains:
-
-- An **overview** of Clean Cut Architecture principles.
-- A guide on how to structure your projects using CCA.
-- Comparisons with Clean and Vertical Slice Architecture.
+The [`/documentation`](documentation/README.md) folder contains a **detailed explanation** of Clean Cut Architecture principles. It dives into how Clean Cut Architecture was born and all the core ideas behind it, and how to make the most out of it.
 
 ### Templates and Examples
 
-The `/templates` folder provides a **starter project template** with basic CCA setup.
-The `/examples` folder provides **real-world like examples** with different flavors of CCA implemented under different circumstances.
+The [`/templates`](templates/README.md) folder provides a **starter project template** with basic CCA setup.
+The [`/examples`](examples/README.md) folder provides **real-world like examples** with different flavors of CCA implemented under different circumstances.
 
 ## Getting Started
 
@@ -102,11 +98,12 @@ git clone https://github.com/fernando-jimenez-dev/clean-cut-architecture.git
 
 ### Step 2: Explore the Docs
 
-Head to the `/docs` folder to understand the core principles and how to get started with Clean Cut Architecture.
+Head to the [`/documentation`](documentation/README.md) folder to understand the core principles and how to get started with Clean Cut Architecture.
 
 ### Step 3: Try the Templates
 
-Check out the `/templates` folder for project setups you can adapt to your own use cases.
+Check out the The [`/templates`](templates/README.md) folder provides a **starter project template** with basic CCA setup.
+folder for project setups you can adapt to your own use cases.
 
 ## Roadmap
 
