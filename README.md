@@ -16,7 +16,7 @@ This repository serves as both a **knowledge base** (documentation) and a collec
 Over my years as a .NET engineer, I’ve been inspired by the structured approach of Clean Architecture and the simplicity of Vertical Slice Architecture. I often found myself blending the two approaches into something that worked better for my projects—something I now call **Clean Cut Architecture**.
 
 <p align="center">
-   <img src="/clean-cut-architecture-graphic.png" width="85%">
+   <img src="/clean-cut-architecture.png" width="85%">
 </p>
 
 Clean Cut Architecture aims to:

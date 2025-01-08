@@ -32,3 +32,5 @@ Clean Cut Architecture is built on the idea of "screaming intent"—making the c
 Most importantly, CCA doesn't stop at theory. This documentation goes beyond abstract principles, offering concrete code examples and templates to bring the architecture to life. You'll find step-by-step demonstrations of how to implement its principles in real-world scenarios, making it easier to bridge the gap between understanding the concepts and applying them effectively in your projects.
 
 Whether you're battling an unwieldy legacy system or starting a fresh project, CCA offers a practical framework designed to evolve with your needs. It's about combining the best of Clean Architecture and Vertical Slice Architecture while introducing fresh ideas to help developers deliver clean, maintainable, and scalable software.
+
+[Next Chapter: Clean Cut Architecture](./2-clean-cut-architecture/README.md)
