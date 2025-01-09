@@ -153,13 +153,15 @@ This principle prevents bloated shared modules and ensures that shared component
 
 Errors are inevitable, but they don’t have to be chaotic. Intentional Error Design makes error handling an integral part of Use Case logic rather than an afterthought.
 
-- **Error Ownership**: Define specific errors for each Use Case and how it will be handled, making it clear what happens when things go wrong.
+- **Error Ownership**: Use Cases should define a specific suite of errors that encapsulate potential failure scenarios. This makes the Use Case's boundaries and capabilities explicit, just like its business logic.
 
-- **Predictable Behavior**: Ensure errors are surfaced in a consistent and understandable way for consumers of your system (e.g., UIs or APIs).
+- **Predictable Behavior**: Errors provide insight into the Use Case's design by outlining the failure paths it anticipates. For example, an OrderProcessing Use Case might expose errors like InvalidOrderDetails, InsufficientInventory, or PaymentFailure.
 
-- **Actionable Errors**: Provide error messages or codes that help developers and users understand and resolve issues.
+- **Actionable Errors**: By defining errors alongside Use Cases, you give a fuller picture of what the application does and how it responds when things go wrong. This ensures that the system is not just a black box but a well-defined contract for consumers.
 
-For instance, instead of throwing generic exceptions or returning nulls, use specific error types that provide meaningful context to developers and system administrators. Having a nicely defined Use Case Error list will make it crystal clear what kind of things can go wrong inside the Use Case, and will allow you to react appropriately to them - specially when they reach Presentation.
+For instance, if a messaging endpoint encounters InvalidOrderDetails, it can skip retries because the error implies a malformed input. Similarly, the Presentation layer can distinguish between errors like InsufficientInventory (which might prompt a 409 Conflict) and PaymentFailure (which could lead to user intervention).
+
+This principle elevates errors to first-class citizens of your architecture, making them as much a part of the system’s story as its Use Cases. It fosters better communication, stronger system resilience, and clearer system intent.
 
 ---
 
