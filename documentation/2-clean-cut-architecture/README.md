@@ -1,4 +1,4 @@
-# II. Clean Cut Architecture
+# **II. Clean Cut Architecture**
 
 ## Table of Contents
 
@@ -6,20 +6,23 @@
 2. [Foundational Pillars](#2-foundational-pillars)
 3. [Principles of CCA](#3-principles-of-cca)
 
-## 1. Introduction
+## 1. **Introduction**
 
 Clean Cut Architecture is more than just another pattern—it’s a philosophy. At its core, it’s about bringing clarity to our systems, both in how they are structured and how they are understood. This philosophy tackles a common challenge in software development: codebases becoming overly complex and difficult to maintain as they evolve. By adopting the principles of Clean Cut Architecture, we aim to build systems that are not only robust but also intuitive to navigate and adapt.
 
 But what does “Clean Cut” truly mean? The name itself carries a dual meaning, each reflecting a cornerstone of the architecture’s design.
 
-### Clearly Defined Boundaries
+### **Clearly Defined Boundaries**
 
 The first meaning of “Clean Cut” highlights the sharp division between the Application and Presentation boundaries. This separation is foundational: Application and Presentation are distinct entities, each with clearly defined roles and responsibilities.
+
 This isn’t just about organization—it’s a statement of intent. The Application boundary houses the business logic: the core rules and operations that define the system’s purpose. It’s designed to be agnostic of external interfaces, free from dependencies on how the system is delivered to the world.
+
 On the other hand, the Presentation boundary is where interaction happens. It handles how the system communicates with users, APIs, or other external actors. By isolating these concerns, we achieve clarity, maintainability, and adaptability. It becomes easier to introduce changes to the interface without fear of breaking the core logic—and vice versa.
+
 This principle of separation ensures that the system’s structure mirrors its purpose. It’s about creating a stable foundation where the roles of each part are unmistakable.
 
-### A Cleanly Cut Application
+### **A Cleanly Cut Application**
 
 The second meaning takes “Clean Cut” deeper. It’s not just about dividing Application and Presentation—it’s about how the Application itself is “cut” into smaller, purposeful pieces. These cuts represent Use Cases: self-contained units of behavior, each serving a specific purpose.
 
@@ -33,7 +36,7 @@ What’s remarkable about this approach is how these Use Cases come together. In
 
 ---
 
-### Making It Easier to Decide
+### **Making It Easier to Decide**
 
 This dual meaning of “Clean Cut” serves another critical purpose: helping developers know where things belong. It answers the common question: “Where should I put this new component?”
 The answer lies in the context:
@@ -51,11 +54,11 @@ This flexibility, grounded in clarity, is what makes Clean Cut Architecture not 
 
 By embracing the two meanings of “Clean Cut”—Clearly Defined Boundaries and A Cleanly Cut Application—we create systems that are intuitive, maintainable, and purpose-driven. These principles provide a solid foundation for the chapters ahead, where we’ll dive deeper into the structure of Clean Cut Architecture and explore how Use Cases bring it all together.
 
-## 2. Foundational Pillars
+## 2. **Foundational Pillars**
 
 The essence of Clean Cut Architecture rests on a few unshakable pillars—concepts that shape its philosophy and guide its practical implementation. These pillars are not arbitrary; they are deliberate choices designed to create systems that are clear, adaptable, and enduring.
 
-### Separation of Concerns
+### **Separation of Concerns**
 
 Why does Clean Cut Architecture draw such a sharp line between Presentation and Application? It's not because mixing them always leads to disaster—there are plenty of systems out there that do just fine without this separation. But "just fine" isn't the goal here; we want to go beyond just creating software that works—we want software that stands the test of time—software that _feels_ right. That is, we want to build a system that works, is clear, adaptable, and easy to maintain.
 
@@ -71,7 +74,7 @@ Having these two boundaries also makes testing strategies clearer and broader. T
 
 Is separating these concerns always necessary, though? Maybe not. Every project has unique demands, and you might get away without it. But by keeping them separated, you benefit from clarity, flexibility, and maintainability—qualities that become invaluable as systems grow and change. Reduce the risk of a tangled mess sneaking up on you!
 
-### Use Case-Centric Design
+### **Use Case-Centric Design**
 
 If Separation of Concerns establishes the borders, Use Case-Centric Design is the map inside. It’s the approach that ensures every piece of functionality has a clear and deliberate home.
 
@@ -81,7 +84,7 @@ This design philosophy shifts the focus away from generic, layered systems towar
 
 By organizing functionality around Use Cases, we ensure that the system’s intent is always front and center. This clarity not only benefits developers working within the system but also communicates its purpose to stakeholders and new team members.
 
-### Cohesion Over Complexity
+### **Cohesion Over Complexity**
 
 In software, complexity often sneaks in unnoticed. Complex structures sprawl out of nowhere all the time; they creep into our codebase, making it a tangled web of interdependencies. Segregated logic is a common problem. It makes it difficult to find all the pieces related to a single feature, and developers are often unsure whether they can safely make changes. Clean Cut Architecture counters this with an emphasis on cohesion: grouping related components together based on the Use Case they serve.
 
@@ -89,41 +92,86 @@ But cohesion doesn't just make things easier to find—it keeps them meaningful.
 
 The result? A system that's not only easier to understand but also easier to maintain. When changes come—and they always do—you know exactly where to look and what to adjust. And your teammates! Teammates reviewing your code can see exactly what you changed and where, what use cases you updated and why. Cohesion isn't just about grouping things together—it's about making sure they _belong_ together. This deliberate organization keeps the system intentional. Clean doesn't mean basic; it means purposeful.
 
-## 3. Principles of CCA
+## 3. **Principles of CCA**
 
 The principles of Clean Cut Architecture build upon its foundational pillars, offering practical guidance to developers. They transform philosophy into action, ensuring that the architecture not only looks good on paper but also works effectively in practice.
 
-### Screaming Intent
+### **Screaming Intent**
 
 The structure of your architecture should make its purpose unmistakable. This principle, borrowed from Clean Architecture, emphasizes the importance of naming and organizing your codebase so that it communicates the system’s intent at a glance.
 
-If someone opens your project, they should immediately understand what it’s for. Namespaces, directories, and file structures should reflect the Use Cases and their roles in the system. This isn’t just about aesthetics—it’s about making the codebase accessible and intuitive for everyone involved.
+- **Purposeful Structure:** Use namespaces, directories, and file structures that clearly represent the system’s Use Cases.
 
-### High Cohesion
+- **Clarity Over Complexity:** Avoid unnecessary abstractions that obscure intent. For instance, a directory named `OrderProcessing` is far clearer than one named `BusinessLogicModule1` or `Helpers`.
+
+- **Immediate Understanding:** Any developer should be able to open the project and quickly understand its purpose and function.
+
+This isn’t just about aesthetics—it’s about making your codebase accessible and intuitive, whether you’re onboarding new team members or revisiting a project months later.
+
+### **High Cohesion**
 
 High Cohesion, inspired by Vertical Slice Architecture, ensures that everything related to a specific Use Case resides in the same place. Controllers, validation logic, domain entities—if they contribute to the same functionality, they should be together.
 
 Why? Because scattering related components across the project creates confusion and unnecessary dependencies. High Cohesion creates clarity by reducing the distance between where a concept is defined and where it is implemented.
 
-### Deferred Implementation
+- **Centralized Logic**: Keep all components tied to a single Use Case within the same module or folder.
 
-Your Premature decisions are the enemy of flexibility. Deferred Implementation, a principle derived from Clean Architecture, reminds us to focus on the core logic of Use Cases before diving into technical details like database schemas or API endpoints.
+- **Reduced Cognitive Load**: Developers should not need to jump between layers or distant files to understand a single functionality.
+
+- **Practical Example**: For an `OrderManagement` Use Case, store the controller, validation rules, and domain logic within an `OrderManagement` module instead of scattering them across unrelated folders.
+
+This principle minimizes confusion, reduces unnecessary dependencies, and enhances the maintainability of your codebase.
+
+### **Deferred Implementation**
+
+Premature decisions are the enemy of flexibility. Deferred Implementation, a principle derived from Clean Architecture, reminds us to focus on the core logic of Use Cases before diving into technical details like database schemas or API endpoints.
 By deferring these decisions, you keep the system adaptable and avoid locking yourself into choices that may later prove limiting. This principle encourages developers to build for the “what” before the “how.”
 
-### Delayed Sharing
+- **Focus on Core Logic**: Start by defining what the system needs to do (the “what”), not how it will do it (the “how”).
+
+- **Delay Commitment**: Postpone decisions on frameworks, libraries, or infrastructure until they’re absolutely necessary.
+
+- **Build for Adaptability**: By keeping the system’s core independent, you maintain the freedom to adapt to changing requirements or technologies.
+
+For example, instead of designing your Use Case around a specific database, build it around abstractions that allow you to decide later, when you have more information, what is the appropriate storage technology to use.
+
+### **Delayed Sharing**
 
 Not everything needs to be shared right away—or at all. In Clean Cut Architecture, components must demonstrate their value across multiple Use Cases before being moved into shared spaces.
 
 This principle guards against premature abstraction, which often leads to unnecessary dependencies and increased complexity. Delayed Sharing ensures that the system remains cohesive, with shared components representing only what truly belongs across boundaries.
 
-### Intentional Error Design
+- **Earned Abstraction**: Only move components into shared modules when there’s clear evidence they’re needed in multiple contexts.
 
-Errors are inevitable, but they don’t have to be chaotic. Intentional Error Design makes error handling an integral part of Use Case logic, rather than an afterthought.
+- **Avoid Premature Generalization**: Resist the urge to generalize logic too early, as this often creates unnecessary dependencies, even stepping into over-engeenering grounds.
+
+- **Practical Example**: If two Use Cases share similar validation logic because their inputs looks similar-resist temptation of creating a single validation logic for both with a switch inside! Keep the logic local to each until it’s clear a shared abstraction will save time and reduce complexity, maybe only validating truly shared values before moving on to exclusive ones.
+
+This principle prevents bloated shared modules and ensures that shared components are truly valuable and relevant. **Sharing privileges are earned, not given.**
+
+### **Intentional Error Design**
+
+Errors are inevitable, but they don’t have to be chaotic. Intentional Error Design makes error handling an integral part of Use Case logic rather than an afterthought.
+
+- **Error Ownership**: Define specific errors for each Use Case and how it will be handled, making it clear what happens when things go wrong.
+
+- **Predictable Behavior**: Ensure errors are surfaced in a consistent and understandable way for consumers of your system (e.g., UIs or APIs).
+
+- **Actionable Errors**: Provide error messages or codes that help developers and users understand and resolve issues.
+
+For instance, instead of throwing generic exceptions or returning nulls, use specific error types that provide meaningful context to developers and system administrators. Having a nicely defined Use Case Error list will make it crystal clear what kind of things can go wrong inside the Use Case, and will allow you to react appropriately to them - specially when they reach Presentation.
 
 ---
+
+By following these principles, Clean Cut Architecture ensures that systems remain focused, maintainable, and adaptable over time. Each principle serves as a compass, guiding developers to make decisions that prioritize clarity, simplicity, and purpose.
+
+<br/>
+<br/>
 
 [Next Chapter: Structure of CCA](../3-structure-of-cca/README.md)
 
 ---
 
 [Previous Chapter: Introduction](../README.md)
+
+---
