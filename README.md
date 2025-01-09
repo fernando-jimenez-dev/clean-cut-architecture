@@ -45,7 +45,7 @@ Imagine your system as a series of cleanly cut slices, each with its own well-de
 
 To give you a better picture, here is the visual representation of the architecture:
 
-<p align="center"><img src="clean-cut-architecture.png" width="85%"></p>
+<p align="center"><img src=".README/images/clean-cut-architecture.png" width="85%"></p>
 
 The **High Level View** illustrates the design of CCA:
 
@@ -79,7 +79,7 @@ Clean Cut Architecture aims to standarize the system's workflow. This workflow k
 To help you understand how everything comes together, here’s a visual workflow of how multiple kinds of incoming requests can be handled in the same fashion, but with different internal components accomplishing the purpose of the request.
 
 <p align="center">
-   <img src="architecture-workflow.png" width="100%">
+   <img src=".README/images/architecture-workflow.png" width="100%">
 </p>
 
 The Architecture Workflow maps the journey of a request through Clean Cut Architecture. Every use case will use different specially tailored components for the use case itself. These components can be of many types - including but not limited to Domain, Abstraction and Infrastructure.

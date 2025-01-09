@@ -3,8 +3,9 @@
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
-2. [Foundational Pillars](#2-foundational-pillars)
-3. [Principles of CCA](#3-principles-of-cca)
+2. [High-Level View](#2-high-level-view)
+3. [Foundational Pillars](#3-foundational-pillars)
+4. [Principles of CCA](#4-principles-of-cca)
 
 ## 1. **Introduction**
 
@@ -54,7 +55,23 @@ This flexibility, grounded in clarity, is what makes Clean Cut Architecture not 
 
 By embracing the two meanings of “Clean Cut”—Clearly Defined Boundaries and A Cleanly Cut Application—we create systems that are intuitive, maintainable, and purpose-driven. These principles provide a solid foundation for the chapters ahead, where we’ll dive deeper into the structure of Clean Cut Architecture and explore how Use Cases bring it all together.
 
-## 2. **Foundational Pillars**
+## 2. **High-Level View**
+
+To understand the structure of Clean Cut Architecture at a glance, consider the following high-level diagram:
+
+<p align="center"><img src="images/high-level-view.png" alt="cca-high-level-view" width="50%"/></p>
+
+The diagram illustrates the architecture's core components and their interactions:
+
+- **Application _(Core Boundary)_:** The beating heart of your system. This is where the magic happens—Use Cases that encapsulate your business logic. Each use case serves a specific purpose for Application to accomplish the final purpose of the system.
+
+- **Presentation _(Interface Boundary)_:** The external-facing part—APIs, UIs, and everything that connects your system to the outside world. Handles external communication while isolating the Application from direct dependencies.
+
+- **Shared _(Cross-Cutting Concerns)_:** Components that transcend individual boundaries, adhering to clear dependency rules. These can take the shape of anything, from utilities for logging or IO operations, to Error types, configurations, database connections, etc.
+
+This visual serves as a reference throughout the guide, helping you contextualize the concepts and principles discussed in later sections.
+
+## 3. **Foundational Pillars**
 
 The essence of Clean Cut Architecture rests on a few unshakable pillars—concepts that shape its philosophy and guide its practical implementation. These pillars are not arbitrary; they are deliberate choices designed to create systems that are clear, adaptable, and enduring.
 
@@ -92,7 +109,7 @@ But cohesion doesn't just make things easier to find—it keeps them meaningful.
 
 The result? A system that's not only easier to understand but also easier to maintain. When changes come—and they always do—you know exactly where to look and what to adjust. And your teammates! Teammates reviewing your code can see exactly what you changed and where, what use cases you updated and why. Cohesion isn't just about grouping things together—it's about making sure they _belong_ together. This deliberate organization keeps the system intentional. Clean doesn't mean basic; it means purposeful.
 
-## 3. **Principles of CCA**
+## 4. **Principles of CCA**
 
 The principles of Clean Cut Architecture build upon its foundational pillars, offering practical guidance to developers. They transform philosophy into action, ensuring that the architecture not only looks good on paper but also works effectively in practice.
 
