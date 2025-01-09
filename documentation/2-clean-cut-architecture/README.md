@@ -63,13 +63,13 @@ To understand the structure of Clean Cut Architecture at a glance, consider the 
 
 The diagram illustrates the architecture's core components and their interactions:
 
-- **Application _(Core Boundary)_:** The beating heart of your system. This is where the magic happens—Use Cases that encapsulate your business logic. Each use case serves a specific purpose for Application to accomplish the final purpose of the system.
+- **Application _(Core Boundary)_:** The beating heart of your system. This is where the magic happens—Use Cases that encapsulate your business logic. This boundary houses Use Cases, each representing a distinct purpose, collectively driving the system’s overall functionality.
 
-- **Presentation _(Interface Boundary)_:** The external-facing part—APIs, UIs, and everything that connects your system to the outside world. Handles external communication while isolating the Application from direct dependencies.
+- **Presentation _(Interface Boundary)_:** The external-facing boundary that connects your system to the outside world, including APIs, UIs, and other communication interfaces. This boundary manages external interactions while shielding the Application from direct dependencies.
 
-- **Shared _(Cross-Cutting Concerns)_:** Components that transcend individual boundaries, adhering to clear dependency rules. These can take the shape of anything, from utilities for logging or IO operations, to Error types, configurations, database connections, etc.
+- **Shared _(Cross-Cutting Concerns)_:** Utilities and components that operate across boundaries, following strict dependency rules. Examples include logging utilities, error types, configuration settings, database connections, and other reusable tools that support the system's infrastructure.
 
-This visual serves as a reference throughout the guide, helping you contextualize the concepts and principles discussed in later sections.
+This visual acts as a foundational reference throughout the guide, helping you contextualize the architecture's components and principles as they are explored in subsequent sections.
 
 ## 3. **Foundational Pillars**
 
