@@ -1,11 +1,11 @@
-# **II. Clean Cut Architecture**
+# **Chapter II - Clean Cut Architecture**
 
-## Table of Contents
+### Table of Contents
 
 1. [Introduction](#1-introduction)
 2. [High-Level View](#2-high-level-view)
 3. [Foundational Pillars](#3-foundational-pillars)
-4. [Principles of CCA](#4-principles-of-cca)
+4. [Principles of Clean Cut Architecture](#4-principles-of-clean-cut-architecture)
 
 ## 1. **Introduction**
 
@@ -109,7 +109,7 @@ But cohesion doesn't just make things easier to find—it keeps them meaningful.
 
 The result? A system that's not only easier to understand but also easier to maintain. When changes come—and they always do—you know exactly where to look and what to adjust. And your teammates! Teammates reviewing your code can see exactly what you changed and where, what use cases you updated and why. Cohesion isn't just about grouping things together—it's about making sure they _belong_ together. This deliberate organization keeps the system intentional. Clean doesn't mean basic; it means purposeful.
 
-## 4. **Principles of CCA**
+## 4. **Principles of Clean Cut Architecture**
 
 The principles of Clean Cut Architecture build upon its foundational pillars, offering practical guidance to developers. They transform philosophy into action, ensuring that the architecture not only looks good on paper but also works effectively in practice.
 
