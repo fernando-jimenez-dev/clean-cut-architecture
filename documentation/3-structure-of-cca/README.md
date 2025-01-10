@@ -1,4 +1,4 @@
-# Chapter III - Structure of Clean Cut Architecture
+# **Chapter III - Structure of Clean Cut Architecture**
 
 ### Table of Contents
 
@@ -71,3 +71,14 @@ The structure of CCA isn’t arbitrary; it’s designed to solve real-world prob
 ### **A Final Thought**
 
 The structure of CCA isn’t a limitation—it’s a guide. It gives you the freedom to focus on building features, solving problems, and writing clean, efficient code. With a clear structure in place, you can stop worrying about the “how” and start focusing on the “what.”
+
+<br/>
+<br/>
+
+[Next Chapter: The Use Case](../4-the-use-case/README.md)
+
+---
+
+[Previous Chapter: Clean Cut Architecture](../2-clean-cut-architecture/README.md)
+
+---

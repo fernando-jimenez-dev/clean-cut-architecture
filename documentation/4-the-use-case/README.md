@@ -78,3 +78,14 @@ Without Use Cases, your application risks turning into a tangle of scattered log
 - **Testability:** Use Cases can be tested in isolation, without worrying about dependencies like databases or APIs.
 
 The Use Case is where Clean Cut Architecture shines. It’s not just a phylosophy; it’s a practice—one that makes your application easier to understand, maintain, and grow.
+
+<br/>
+<br/>
+
+[Next Chapter: Questions and Answers](../5-questions-and-answers/README.md)
+
+---
+
+[Previous Chapter: Structure of Clean Cut Architecture](../3-structure-of-cca/README.md)
+
+---

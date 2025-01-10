@@ -187,7 +187,7 @@ By following these principles, Clean Cut Architecture ensures that systems remai
 <br/>
 <br/>
 
-[Next Chapter: Structure of CCA](../3-structure-of-cca/README.md)
+[Next Chapter: Structure of Clean Cut Architecture](../3-structure-of-cca/README.md)
 
 ---
 

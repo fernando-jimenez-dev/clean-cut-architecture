@@ -1,4 +1,4 @@
-# Chapter VI: Q&A – Answering the Big Questions
+# **Chapter VI: Q&A – Answering the Big Questions**
 
 No architecture is complete without addressing the "why," "how," and "what about this scenario?" questions that inevitably arise. This chapter tackles the most common queries about Clean Cut Architecture (CCA), so you can walk away with clarity and confidence.
 
@@ -119,3 +119,10 @@ Clean Cut Architecture isn’t just a set of rules; it’s a mindset. It’s abo
 So, what’s next? Get out there and experiment. Try CCA on your next project and see how it works for you. And if you’ve got feedback or experiences to share, this repository is here for that.
 
 Remember, Clean Cut Architecture is a starting point—not a one-size-fits-all solution. Adapt it, shape it, and make it work for your needs. At the end of the day, **it’s your project, and you’re the one who ensures it thrives.**
+
+<br/>
+<br/>
+
+[Previous Chapter: The Use Case](../4-the-use-case/README.md)
+
+---
