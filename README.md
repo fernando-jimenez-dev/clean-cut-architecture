@@ -97,7 +97,7 @@ Head over to the **[/documentation](/documentation/README.md)** folder to learn 
 ## Roadmap
 
 - ☑️ Set up repository and first ReadMe.
-- ☐ Initial documentation on principles and concepts.
+- ☑️ Initial documentation on principles and concepts.
 - ☑️ Add a starter project template.
 - ☐ Provide more real-world examples.
 - ☐ Create guides for integrating CCA into existing systems.
