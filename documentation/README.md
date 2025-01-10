@@ -15,7 +15,7 @@ Welcome to the **Documentation Hub** for Clean Cut Architecture! This directory 
 2. [Clean Cut Architecture](2-clean-cut-architecture/README.md) - The Philosophical Foundation
 3. [Structure of CCA](3-structure-of-cca/README.md) - The Under the Hood
 4. [The Use Case](4-the-use-case/README.md) - The Building Blocks
-5. [Questions & Answers](5-questions-and-answers/README.md)
+5. [Questions & Answers](5-questions-and-answers/README.md) - Answering the Big Questions
 
 # I. Introduction
 
