@@ -1,4 +1,6 @@
-﻿using Application.UseCases.CheckPulse.Abstractions;
+﻿using Application.Shared.Errors;
+using Application.UseCases.CheckPulse.Abstractions;
+using Application.UseCases.CheckPulse.Errors;
 using Microsoft.Extensions.Logging;
 
 namespace Application.UseCases.CheckPulse;
@@ -19,21 +21,50 @@ public class CheckPulseUseCase : ICheckPulseUseCase
 
     public CheckPulseUseCase(ILogger<CheckPulseUseCase> logger, ICheckPulseRepository checkPulseRepository)
     {
-        this.logger = logger;
-        this.checkPulseRepository = checkPulseRepository;
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.checkPulseRepository = checkPulseRepository ?? throw new ArgumentNullException(nameof(checkPulseRepository));
     }
 
     public async Task<CheckPulseUseCaseOutput> Run(string input, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(input))
+            return ValidationErrorOutput("Input cannot be empty", "CheckPulseUseCase Input");
+
+        try
+        {
+            return await HandlePulseCheck(input, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            return UnexpectedErrorOutput(input, exception);
+        }
+    }
+
+    private async Task<CheckPulseUseCaseOutput> HandlePulseCheck(string input, CancellationToken cancellationToken)
+    {
         var vitalReadings = await checkPulseRepository.RetrieveVitalReadings(cancellationToken);
+
         if (vitalReadings.Length > 0)
         {
-            logger.LogInformation("We are up and running! Here is your input: {}", input);
+            logger.LogInformation("System operational. Input: {Input}", input);
             await checkPulseRepository.SaveNewVitalCheck();
-            return new CheckPulseUseCaseOutput(IsSuccess: true);
+            return new CheckPulseUseCaseOutput(isSuccess: true);
         }
 
-        logger.LogError("We could not find any vitals.");
-        return new CheckPulseUseCaseOutput(IsSuccess: false, ErrorMessage: "Vitals were empty!");
+        logger.LogDebug("No vital readings found.");
+        return new CheckPulseUseCaseOutput(new EmptyVitalsError());
+    }
+
+    private CheckPulseUseCaseOutput ValidationErrorOutput(string message, string field)
+    {
+        logger.LogDebug("Validation error: {Message}", message);
+        return new CheckPulseUseCaseOutput(new ValidationError(message, field));
+    }
+
+    private CheckPulseUseCaseOutput UnexpectedErrorOutput(string input, Exception exception)
+    {
+        var errorMessage = $"Unexpected error during Check Pulse use case. Input: '{input}'";
+        logger.LogError(exception, errorMessage);
+        return new CheckPulseUseCaseOutput(new UnexpectedError(errorMessage, exception));
     }
 }
