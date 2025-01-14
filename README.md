@@ -115,5 +115,5 @@ For now, this repository is a **work in progress**, but feel free to open issues
    Happy Coding!
 </h3>
 <h6 align="center">
-   <i>0.2.0-beta</i>
+   <i>0.3.0-beta</i>
 </h6>

@@ -2,10 +2,10 @@
 
 ### **Table of Contents**
 
-1. [What is a Use Case in CCA?](https://www.notion.so/Chapter-IV-The-Use-Case-176462e65f92800f8541cd374930f991?pvs=21)
-2. [The Anatomy of a Use Case](https://www.notion.so/Chapter-IV-The-Use-Case-176462e65f92800f8541cd374930f991?pvs=21)
-3. [Use Cases in Action](https://www.notion.so/Chapter-IV-The-Use-Case-176462e65f92800f8541cd374930f991?pvs=21)
-4. [Key Principles of Use Cases](https://www.notion.so/Chapter-IV-The-Use-Case-176462e65f92800f8541cd374930f991?pvs=21)
+1. [What is a Use Case in CCA?](#1-what-is-a-use-case-in-cca)
+2. [The Anatomy of a Use Case](#2-the-anatomy-of-a-use-case)
+3. [Use Cases in Action](#3-use-cases-in-action)
+4. [Key Principles of Use Cases](#4-key-principles-of-use-cases)
 
 At the heart of Clean Cut Architecture (CCA) lies the **Use Case**—a foundational building block that encapsulates the **what** of your application. Use Cases give purpose to your system, acting as self-contained units of business logic, and driving clarity, independence, and adaptability. Every component plays a supporting role to ensure the use cases fulfill their purpose.
 
