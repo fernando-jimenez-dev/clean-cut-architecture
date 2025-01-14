@@ -44,23 +44,53 @@ A Use Case can be thought of as a **well-organized pipeline**, with each part pl
 ### **Layered Organization of a Use Case**
 
 Visually a Use Case would resemble an inverted cone, with the following orchestrated internal components:
+Visually, a Use Case resembles an **inverted cone**, with layers that lfow from high-level orchestration to detail implementation. Each set of components is crafted to maintain clarity, flexibility, and modularity.
 
 <p align="center"><img src="images/use-case-details.png" alt="use-case-details" width="40%"/></p>  
 <p align="center"><i>Use Case Details: Visualizing the internal structure of a Use Case.</i></p>
 
-0. **Use Case Concerns:**
-   - Specificies the flow of operations needed to accomplish the use case purpose.
-   - Contains business logic in the form of steps.
-   - Orchestrates every concern needed for the use case.
-1. **Domain Concerns:**
-   - Encapsulates heavier business logic and rules.
-   - Relies on entities and aggregates to enforce domain integrity.
-2. **Abstraction Concerns:**
-   - Provides interfaces for interacting with external systems (e.g., `IOrderRepository`, `IPaymentService`).
-   - Keeps the Use Case and Domain concerns isolated from implementation details.
-3. **Infrastructure Concerns:**
-   - Implements the abstractions, connecting the Use Case to external resources (e.g., databases, APIs).
-   - Initially resides in the Use Case itself, however it can also be implemented inside Shared Zones.
+0. **The Use Case Component:**
+
+   The Use Case component serves as a **Business Logic zone**, acting as the brain of the operation:
+
+   - **Core Responsability:** It defines and drives the flow of operations needed to accomplish the Use Case's purpose.
+   - **Encapsulation of Logic:** Rather than relying on dedicated Domain components like entitites or aggregates, the Use Case itself can own and manage its domain logic.
+   - **Delegate When Needed:** For more complex operations, the Use Case can delegate specific tasks to reusable Domain Components that encapsulate intricate business rules.
+   - **Creator of Domain Concerns:** The Use Case often instantiates and orchestrates the lifecycle of Domain components, ensuring they remain tightly coupled to the purpose of the Use Case.
+
+   This dual role-**owning logic directly and delegating complexity as needed**-allows the Use Case to adapt to both siple and complex workflows without over-engineering.
+
+1. **Domain Components:**
+
+   Domain Components exist to **support the Use Case** by handling more specialized business logic.
+
+   - **Optional but Powerful:** If a Use Case requires sophisticated validations, calculations, rules, aggregations, etc. these Domain Components encapsulate the logic to keep the Use Case itself focused on orchestration.
+   - **Reusable Knowledge:** Domain Components can also provide reusable logic across multiple Use Cases, but their primary allegiance is always to the Use Case's needs.
+
+   In simpler systems, the Use Case may directly implement all logic, making explicit Domain Components unnecessary.
+
+2. **Abstraction Components:**
+
+   Abstractions Components aim to bridge the Use Case to external resources while maintaining isolation:
+
+   - **Defined Interfaces:** Provides contracts for interacting with external systems (e.g., `IOrderRepository`, `IPaymentService`).
+   - **Enforces Decoupling:** Protects the Use Case from changes in infrastrucure or external system implementations.
+
+3. **Infrastructure Components:**
+
+   Infrastructure Components implement Abstractions, making the Use Case functional in real-world scenarios:
+
+   - **Concrete Implementations:** Implements interfaces for external systems (e.g., repositories, API gateways).
+   - **Flexible Placement:** While initially implemented directl within the Use Case for simplicity, they can be moved to a Shared zone for broader reuse as the system grows.
+
+### **The Versatile Role of the Use Case**
+
+By allowing the Use Case act as both the **owner of business logic** and the **orchestrator of Domain components**, Clean Cut Architecture strikes a balance:
+
+1. For simple workflows, the Use Case itself can handle all logic directly, avoiding unnecessary complexity.
+2. For complex scenarios, the Use Case collaborates with Domain Components to manage intricate business requirements, without losing sight of the overall orchestration.
+
+This approach ensures that the Use Case remains both **focused on its purpose** and **adaptable to evolving requirements.** It also avoids the pitfalls of overengineering while maintaning a clear structure for future growth.
 
 ## 3. **Use Cases in Action**
 

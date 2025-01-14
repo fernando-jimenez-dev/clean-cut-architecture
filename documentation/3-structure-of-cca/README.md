@@ -251,13 +251,13 @@ Clean Cut Architecture (CCA) enforces a one-way dependency rule: **data flows in
    ```json
    {
      "name": "John Doe",
-     "email": "[john.doe@example.com](mailto:john.doe@example.com)"
+     "email": "john.doe@example.com"
    }
    ```
 
    The Presentation boundary would validate this data (e.g., ensuring email is in a valid format) and translate it into a request object like CreateUserRequest for the Application boundary.
 
-2. **Application Boundary Processes runs the Use Case**
+2. **Application Boundary Processes run the Use Case**
 
    The Application boundary is the core of the system. Once the sanitized and transformed input reaches here, the system leverages its **Domain logic, Abstractions, and Infrastructure** to fulfill the use case.
 
