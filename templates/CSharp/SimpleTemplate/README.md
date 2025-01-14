@@ -10,6 +10,7 @@ This template serves as a foundation for projects following the **Clean Cut Arch
 - **Screaming Intent:** The folder structure highlights the purpose of each component, emphasizing clarity and intent.
 - **Cohesion and Isolation:** Components are tightly focused on their specific responsibilities and interact only where necessary.
 - **Extendable Template:** Easily adapt this template to fit your business needs and domain requirements.
+- **Intentional Error Design:** Error scenarios are designed as part of the use case logic.
 
 ## Example Use Case: Check Pulse
 
