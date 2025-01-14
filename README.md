@@ -61,10 +61,10 @@ The **Use Case Internals** zooms into the **Application Boundary**, showing how 
 
 ## **Quick Start**
 
-Want to get started? Here’s what you’ll find in this repository:
+Want to get started? Here's what you'll find in this repository:
 
 - **[/documentation](/documentation/README.md):**
-  Dive into the nitty-gritty of Clean Cut Architecture. From its guiding principles to practical implementations, this is where you’ll learn what makes CCA tick.
+  Dive into the nitty-gritty of Clean Cut Architecture. From its guiding principles to practical implementations, this is where you'll learn what makes CCA tick.
 
 - **[/templates](/templates/README.md):**
   Ready to jump in? Start with our project templates and hit the ground running with CCA.
@@ -76,7 +76,7 @@ Want to get started? Here’s what you’ll find in this repository:
 
 Clean Cut Architecture aims to standarize the system's workflow. This workflow keeps the focus on the Use Case, with it being the entry point into the Application's business rules and orchestrating the necessary components to accomplish it's goal.
 
-To help you understand how everything comes together, here’s a visual workflow of how multiple kinds of incoming requests can be handled in the same fashion, but with different internal components accomplishing the purpose of the request.
+To help you understand how everything comes together, here's a visual workflow of how multiple kinds of incoming requests can be handled in the same fashion, but with different internal components accomplishing the purpose of the request.
 
 <p align="center">
    <img src=".README/images/architecture-workflow.png" width="100%">
@@ -90,9 +90,9 @@ The Architecture Workflow maps the journey of a request through Clean Cut Archit
 
 ## **Ready to Cut to the Chase?**
 
-Clean Cut Architecture is more than just a set of rules—it’s a way of thinking about software design. If you’ve ever felt bogged down by overly complex systems, unclear responsibilities, or just the general messiness of software development, CCA might just be the change you’re looking for.
+Clean Cut Architecture is more than just a set of rules—it's a way of thinking about software design. If you've ever felt bogged down by overly complex systems, unclear responsibilities, or just the general messiness of software development, CCA might just be the change you're looking for.
 
-Head over to the **[/documentation](/documentation/README.md)** folder to learn the building blocks of Clean Cut Architecture and start designing systems you’ll enjoy working with.
+Head over to the **[/documentation](/documentation/README.md)** folder to learn the building blocks of Clean Cut Architecture and start designing systems you'll enjoy working with.
 
 ## Roadmap
 
@@ -115,5 +115,5 @@ For now, this repository is a **work in progress**, but feel free to open issues
    Happy Coding!
 </h3>
 <h6 align="center">
-   <i>0.2.0-beta</i>
+   <i>0.3.0-beta</i>
 </h6>

@@ -1,11 +1,11 @@
 <h1 align="center">Clean Cut Architecture</h1>
 <h3 align="center">Documentation</h3>
-<p align="center">0.2.0-beta</p>
+<p align="center">0.3.0-beta</p>
 
 ---
 
 > [!WARNING]
-> This documentation is a **work in progress** and its currently in version `0.2.0-beta`. Expect incomplete sections, evolving content, and potential changes in structure. We are actively working on completing the core chapters and refining the examples. Feedback and suggestions are welcome as we refine the material.
+> This documentation is a **work in progress** and its currently in version `0.3.0-beta`. Expect incomplete sections, evolving content, and potential changes in structure. We are actively working on completing the core chapters and refining the examples. Feedback and suggestions are welcome as we refine the material.
 
 Welcome to the **Documentation Hub** for Clean Cut Architecture! This directory is the go-to place for understanding the principles, practices, and guidelines that form the foundation of CCA.
 

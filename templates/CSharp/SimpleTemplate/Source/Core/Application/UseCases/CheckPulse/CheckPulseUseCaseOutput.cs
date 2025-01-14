@@ -1,3 +1,21 @@
-﻿namespace Application.UseCases.CheckPulse;
+﻿using Application.Shared.Errors;
 
-public record CheckPulseUseCaseOutput(bool IsSuccess, string? ErrorMessage = null) { }
+namespace Application.UseCases.CheckPulse;
+
+public record CheckPulseUseCaseOutput
+{
+    public bool IsSuccess { get; init; }
+    public Error? Error { get; init; }
+
+    public CheckPulseUseCaseOutput(bool isSuccess, Error? error = null)
+    {
+        IsSuccess = isSuccess;
+        Error = error;
+    }
+
+    public CheckPulseUseCaseOutput(Error error)
+    {
+        IsSuccess = false;
+        Error = error;
+    }
+}
