@@ -1,6 +1,5 @@
-﻿using Application.UseCases.CheckPulse;
-using Application.UseCases.CheckPulse.Abstractions;
-using Application.UseCases.CheckPulse.Infrastructure;
+﻿using Application.UseCases.HealthCheck;
+using Application.UseCases.HealthCheck.Abstractions;
 
 namespace WebAPI.Minimal.StartUp;
 
@@ -19,13 +18,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection ConfigureWebApiDependencies(this IServiceCollection services)
     {
         return services
-            .AddCheckPulseUseCase();
+            .AddHealthCheckUseCase();
     }
 
-    private static IServiceCollection AddCheckPulseUseCase(this IServiceCollection services)
+    private static IServiceCollection AddHealthCheckUseCase(this IServiceCollection services)
     {
-        services.AddScoped<ICheckPulseUseCase, CheckPulseUseCase>();
-        services.AddScoped<ICheckPulseRepository, InMemoryCheckPulseRepository>();
+        services.AddScoped<IHealthCheckUseCase, HealthCheckUseCase>();
         return services;
     }
 }

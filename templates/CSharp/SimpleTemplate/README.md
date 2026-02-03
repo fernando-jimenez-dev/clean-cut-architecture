@@ -1,56 +1,110 @@
-# Simple Template
+# Clean Cut Architecture - Simple .NET Template
 
-This template serves as a foundation for projects following the **Clean Cut Architecture (CCA)** principles. It includes:
+This repository provides a minimal, opinionated .NET template built around Clean Cut Architecture (CCA).
 
-1. A well-structure folder organization based on CCA.
-2. An example use case: **Check Pulse**, demonstrating the implementation of key architectural concepts.
+It is designed to help you start new projects with:
+- clear boundaries
+- explicit intent
+- predictable failure handling
+- zero architectural guesswork
 
-## Features
+The template is intentionally small. It gives you just enough structure to build real systems without forcing a framework mindset.
 
-- **Screaming Intent:** The folder structure highlights the purpose of each component, emphasizing clarity and intent.
-- **Cohesion and Isolation:** Components are tightly focused on their specific responsibilities and interact only where necessary.
-- **Extendable Template:** Easily adapt this template to fit your business needs and domain requirements.
-- **Intentional Error Design:** Error scenarios are designed as part of the use case logic.
+## What This Template Gives You
 
-## Example Use Case: Check Pulse
+### Clear Architectural Intent
+The folder structure is designed to scream intent.
+You should be able to understand what the system does by reading the solution layout alone.
 
-The `Check Pulse` use case showcases the core principles of CCA while serving as an optional health-check mechanism.
+Use cases, boundaries, and infrastructure are separated explicitly, not implicitly.
 
-- **Purpose:** Validates that the application is operational and running correctly.
-- **Input:** Accepts an optional string for testing purposes.
-- **Output:** Returns a success or failure result.
-- **Endpoint:** Exposed via `GET /check-pulse` for integration testing or operational monitoring.
+### Use-Case-Driven Design
+Business logic lives in use cases, not controllers, not services, not helpers.
 
-## How to Use
+Use cases:
+- receive input
+- execute application logic
+- return a Result
+- never throw
 
-**1. Understand the Template Structure:**
-Explore the folder organization to understand where use cases and other components reside, and how they come together.
+### Explicit Result and Error Model
+The template includes a Result / Error model with the following guarantees:
+- Operations return Result or Result<T>, never exceptions.
+- Errors are first-class domain objects, not strings.
+- Errors can aggregate multiple causes.
+- Exceptions are treated as diagnostic context, not control flow.
+- Error handling is explicit and testable.
 
-**2. Replace Example Use Case:**
-Replace `CheckPulseUseCase` with your own business-specific use cases, following the same design principles.
+This allows failures to be:
+- intentional
+- observable
+- handled consistently at boundaries
 
-**3. Implement Your Use Cases:**
-Add your business-specific logic while ensuring it adheres to the principles of cohesion and isolation.
+### Boundary-Only Responsibility
+Endpoints (or other entry points) are responsible for:
+- invoking use cases
+- translating Result into protocol-specific responses (HTTP, messaging, etc.)
+- logging failures appropriately
 
-**4. Extend Infrastructure:**
-Customize the infrastructure layer to fit your project’s dependencies, databases, and external systems.
+Use cases do not know about HTTP, logging, tracing, or transport concerns.
 
-## Optional: Using It as a dotnet Template
+## Example Use Case: Health Check
+The template includes a small example use case to demonstrate the full flow end-to-end.
 
-Transform this project into a reusable .NET template to accelerate your development workflow:
+### HealthCheckUseCase
+Purpose: Verifies that the application is operational.
+Input: None.
+Output: Result.Success() or Result.Failure(...).
 
-**1. Pack the template**
-Open your terminal and run:
+This use case exists purely as a reference and can be safely removed.
 
-`dotnet new install CleanCutArchitectureTemplate -force`
+### HealthCheck Endpoint
+Exposes the use case via an HTTP endpoint.
 
-This will install the solution structure as a template for you to use from the dotnet CLI or the Wizard.
+Demonstrates:
+- how to handle successful results
+- how to log and translate failures
+- how to distinguish between:
+execution anomalies (exceptions wrapped in errors),
+and errors that are simply not mapped by the endpoint yet.
 
-**2. Use the template**
-Open your terminal on the location you want to start your new solution that uses CCA, and run (replace YourSolutionName with the actual name of your solution):
+## How to Use This Template
 
-`dotnet new cca -n <YourSolutionName>`
+1. Explore the Structure
+Start by browsing the solution folders.
+Pay attention to where logic lives and where it does not.
+If something feels "missing", that's intentional.
 
-You can also use the more verbose command:
+2. Replace the Example Use Case
+Delete the HealthCheck use case and endpoint, or keep them as reference.
+Create your own use cases following the same pattern:
+input -> execution -> Result.
 
-`dotnet new clean-cut-architecture -n <YourSolutionName>`
+3. Model Failures Explicitly
+Define error types that represent known failure scenarios in your domain.
+If you catch an exception you did not plan for, wrap it in the designated exception-based error and return it as a failure result.
+Seeing those errors in logs is a signal to extend your error model, not to ignore them.
+
+4. Extend Infrastructure Deliberately
+Add databases, messaging, external APIs, and other infrastructure concerns behind clear boundaries.
+Infrastructure should adapt to your use cases - never the other way around.
+
+## Using This Repository as a .NET Template (Optional)
+You can install this repository as a reusable .NET template.
+
+### Install the Template
+From the repository root:
+```bash
+dotnet new install . --force
+```
+
+### Create a New Solution
+Navigate to the directory where you want your new solution and run:
+```bash
+dotnet new cca -n <YourSolutionName>
+```
+
+Or, using the full name:
+```bash
+dotnet new clean-cut-architecture -n <YourSolutionName>
+```
