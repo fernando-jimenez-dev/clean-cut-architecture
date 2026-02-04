@@ -1,4 +1,4 @@
-﻿using WebAPI.Minimal.UseCases.CheckPulse;
+﻿using WebAPI.Minimal.UseCases.HealthCheck;
 
 namespace WebAPI.Minimal.StartUp;
 
@@ -6,17 +6,17 @@ public static class EndpointsRegistryExtensions
 {
     public static void RegisterWebApiEndpoints(this IEndpointRouteBuilder routes)
     {
-        routes.AddCheckPulseEndpoint();
+        routes.AddHealthCheckEndpoint();
     }
 
-    private static IEndpointRouteBuilder AddCheckPulseEndpoint(this IEndpointRouteBuilder routes)
+    private static IEndpointRouteBuilder AddHealthCheckEndpoint(this IEndpointRouteBuilder routes)
     {
-        var groupName = "/check-pulse";
+        var groupName = "/healthcheck";
         var group = routes.MapGroup(groupName);
 
         group
-            .MapGet("/", CheckPulseEndpoint.Execute)
-            .WithName("CheckPulse")
+            .MapGet("/", HealthCheckEndpoint.Execute)
+            .WithName("HealthCheck")
             .WithOpenApi();
 
         return routes;

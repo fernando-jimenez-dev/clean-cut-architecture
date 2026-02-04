@@ -1,4 +1,6 @@
-﻿namespace Application.Shared.Abstractions.UseCase
+﻿using Shared.ResultPattern;
+
+namespace Application.Shared.Abstractions.UseCase
 {
     /// <summary>
     /// Represents a use case that performs an action.
@@ -10,7 +12,7 @@
         /// </summary>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task Run(CancellationToken cancellationToken = default);
+        Task<Result> Run(CancellationToken cancellationToken = default);
     }
 
     /// <summary>
@@ -26,7 +28,7 @@
         /// <param name="input">The input for the use case.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the execution output.</returns>
-        Task<TUseCaseOutput> Run(TUseCaseInput input, CancellationToken cancellationToken = default);
+        Task<Result<TUseCaseOutput>> Run(TUseCaseInput input, CancellationToken cancellationToken = default);
     }
 
     /// <summary>
@@ -41,7 +43,7 @@
         /// <param name="input">The input for the use case.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task Run(TUseCaseInput input, CancellationToken cancellationToken = default);
+        Task<Result> Run(TUseCaseInput input, CancellationToken cancellationToken = default);
     }
 }
 
@@ -58,6 +60,6 @@ namespace Application.Shared.Abstractions.UseCase.OutputOnly
         /// </summary>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the execution output.</returns>
-        Task<TUseCaseOutput> Run(CancellationToken cancellationToken = default);
+        Task<Result<TUseCaseOutput>> Run(CancellationToken cancellationToken = default);
     }
 }
