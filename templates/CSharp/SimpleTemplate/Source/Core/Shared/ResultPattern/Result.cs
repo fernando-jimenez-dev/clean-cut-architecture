@@ -118,10 +118,9 @@ public record Result<TValue>
     public Error? Error { get; }
 
     /// <summary>
-    /// Returns <c>true</c> if the result has a non-null value.
+    /// Returns <c>true</c> if the result has a value.
     /// If the operation failed, this will always be <c>false</c>.
-    /// If the operation was successful, this will be <c>true</c> if the value is non-null,
-    /// or <c>false</c> if the value is null.
+    /// If the operation was successful, this will be <c>true</c> only when a value was provided.
     /// </summary>
     public bool HasValue { get; }
 
@@ -131,12 +130,13 @@ public record Result<TValue>
     /// </summary>
     /// <param name="value">The result value, or <c>null</c> if empty, or <c>default</c> if failed.</param>
     /// <param name="error">The error if failed, or <c>null</c> if successful.</param>
-    private Result(TValue? value = default, Error? error = null)
+    /// <param name="hasValue">Whether a value was provided for a successful result.</param>
+    private Result(TValue? value, Error? error, bool hasValue)
     {
         IsSuccess = error is null;
         Error = error;
         Value = value;
-        HasValue = IsSuccess && value is not null;
+        HasValue = IsSuccess && hasValue;
     }
 
     /// <summary>
@@ -182,13 +182,15 @@ public record Result<TValue>
         value ?? throw new ArgumentNullException(
             nameof(value),
             "Result<TValue>.Success was called with a null value. Every successful result must provide a non-null value."
-        )
+        ),
+        null,
+        true
     );
 
     /// <summary>
     /// Creates a successful result that does not have a value.
     /// </summary>
-    public static Result<TValue> Success() => new();
+    public static Result<TValue> Success() => new(default, null, false);
 
     /// <summary>
     /// Creates a failed result with the specified error.
@@ -199,6 +201,7 @@ public record Result<TValue>
         error ?? throw new ArgumentNullException(
             nameof(error),
             "Result<TValue>.Failure was called with a null error. Every failure must provide a non-null Error instance."
-        )
+        ),
+        false
     );
 }
