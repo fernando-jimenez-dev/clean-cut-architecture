@@ -94,6 +94,33 @@ public class HealthCheckEndpointTests
         Assert.Equal($"HealthCheck failed with an error not mapped by endpoint. Code: {unknownError.Code}. Message: {unknownError.Message}", errorLog.Message);
     }
 
-    private sealed record UnknownError()
-        : Error(code: "health.modeled_failure", message: "Modeled failure.");
+    [Fact]
+    public async Task ShouldReturn500_AndLogUnhandledException_WhenUnknownErrorContainsUnhandledExceptionCause()
+    {
+        // Arrange
+        var exception = new Exception("boom");
+        var unexpectedError = new UnhandledExceptionError(exception);
+        var unknownError = new UnknownError(causes: new List<Error> { unexpectedError });
+        _healthCheckUseCase
+            .Run(_cancellationToken)
+            .Returns(Result.Failure(unknownError));
+
+        // Act
+        var endpointResult = await HealthCheckEndpoint.Execute(_healthCheckUseCase, _logger, _cancellationToken);
+
+        // Assert response
+        var jsonResult = Assert.IsType<JsonHttpResult<HealthCheckEndpointResponse>>(endpointResult);
+        Assert.Equal((int)HttpStatusCode.InternalServerError, jsonResult.StatusCode);
+        Assert.NotNull(jsonResult.Value);
+        Assert.Equal("Unhealthy.", jsonResult.Value.Message);
+
+        // Assert logs
+        var errorLog = _logger.Collector.GetSnapshot()[0];
+        Assert.Equal(LogLevel.Error, errorLog.Level);
+        Assert.Equal(exception, errorLog.Exception);
+        Assert.Equal($"HealthCheck failed with an unhandled exception. Code: {unexpectedError.Code}", errorLog.Message);
+    }
+
+    private sealed record UnknownError(IReadOnlyList<Error>? causes = null)
+        : Error(code: "health.modeled_failure", message: "Modeled failure.", causes: causes);
 }

@@ -48,7 +48,7 @@ public record Result
     /// Returns <c>true</c> if the operation failed, and outputs the associated error.
     /// </summary>
     /// <param name="error">The error if failed; otherwise <c>null</c>.</param>
-    public bool Failed(out Error? error)
+    public bool Failed([NotNullWhen(true)] out Error? error)
     {
         error = Error;
         return IsFailure;
@@ -72,12 +72,11 @@ public record Result
     /// Creates a failed result with the specified error.
     /// </summary>
     /// <param name="error">The associated error. Must not be <c>null</c>.</param>
-    public static Result Failure(Error error) => new(
-        error ?? throw new ArgumentNullException(
-            nameof(error),
-            "Result.Failure was called with a null error. Every failure must provide a non-null Error instance."
-        )
-    );
+    public static Result Failure(Error error)
+    {
+        ArgumentNullException.ThrowIfNull(error);
+        return new(error);
+    }
 
     /// <summary>
     /// Creates a failed generic result with the specified error.
@@ -146,14 +145,26 @@ public record Result<TValue>
 
     /// <summary>
     /// Returns <c>true</c> if the operation was successful and outputs the value.
+    /// This does not guarantee that a value exists.
+    /// Use <see cref="TryGetValue"/> when a value is required.
     /// </summary>
     /// <param name="value">
     /// The result value if successful; otherwise <c>default</c>.
     /// </param>
-    public bool Succeeded([MaybeNullWhen(false)] out TValue? value)
+    public bool Succeeded([MaybeNull] out TValue? value)
     {
         value = Value;
         return IsSuccess;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when the operation succeeded and a value exists.
+    /// </summary>
+    /// <param name="value">The result value when available; otherwise <c>default</c>.</param>
+    public bool TryGetValue([NotNullWhen(true)] out TValue? value)
+    {
+        value = Value;
+        return IsSuccess && HasValue;
     }
 
     /// <summary>
@@ -165,7 +176,7 @@ public record Result<TValue>
     /// Returns <c>true</c> if the operation failed, and outputs the associated error.
     /// </summary>
     /// <param name="error">The error if failed; otherwise <c>null</c>.</param>
-    public bool Failed(out Error? error)
+    public bool Failed([NotNullWhen(true)] out Error? error)
     {
         error = Error;
         return IsFailure;
@@ -196,12 +207,9 @@ public record Result<TValue>
     /// Creates a failed result with the specified error.
     /// </summary>
     /// <param name="error">The associated error. Must not be <c>null</c>.</param>
-    public static Result<TValue> Failure(Error error) => new(
-        default,
-        error ?? throw new ArgumentNullException(
-            nameof(error),
-            "Result<TValue>.Failure was called with a null error. Every failure must provide a non-null Error instance."
-        ),
-        false
-    );
+    public static Result<TValue> Failure(Error error)
+    {
+        ArgumentNullException.ThrowIfNull(error);
+        return new(default, error, false);
+    }
 }
