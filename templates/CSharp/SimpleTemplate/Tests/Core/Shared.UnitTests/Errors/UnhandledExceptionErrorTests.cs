@@ -27,7 +27,8 @@ public class UnhandledExceptionErrorTests
         var error = new UnhandledExceptionError(ex, message: "custom", causes: causes);
 
         Assert.Equal("custom", error.Message);
-        Assert.Same(causes, error.Causes);
+        Assert.Equal(causes, error.Causes);
+        Assert.NotSame(causes, error.Causes);
     }
 
     [Fact]

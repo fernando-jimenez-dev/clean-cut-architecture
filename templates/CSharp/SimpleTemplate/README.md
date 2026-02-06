@@ -32,8 +32,12 @@ The template includes a Result / Error model with the following guarantees:
 - Operations return Result or Result<T>, never exceptions.
 - Errors are first-class domain objects, not strings.
 - Errors can aggregate multiple causes.
+- Error graph type lookup is exact-type by design.
 - Exceptions are treated as diagnostic context, not control flow.
 - Error handling is explicit and testable.
+
+When multiple errors with the same runtime type exist in a causes graph,
+lookup returns the first encountered error in causes order.
 
 This allows failures to be:
 - intentional

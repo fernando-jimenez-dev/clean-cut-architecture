@@ -60,6 +60,8 @@ public class ResultTests
 
         Assert.True(result.Succeeded(out var value));
         Assert.Equal(42, value);
+        Assert.True(result.TryGetValue(out var strictValue));
+        Assert.Equal(42, strictValue);
         Assert.False(result.Failed());
     }
 
@@ -75,6 +77,8 @@ public class ResultTests
 
         Assert.True(result.Succeeded(out var value));
         Assert.Null(value);
+        Assert.False(result.TryGetValue(out var strictValue));
+        Assert.Null(strictValue);
         Assert.False(result.Failed());
     }
 
@@ -93,6 +97,8 @@ public class ResultTests
         Assert.True(result.Failed(out var found));
         Assert.Same(error, found);
         Assert.False(result.Succeeded());
+        Assert.False(result.TryGetValue(out var value));
+        Assert.Equal(default, value);
     }
 
     [Fact]

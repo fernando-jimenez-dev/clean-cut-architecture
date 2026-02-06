@@ -16,20 +16,20 @@ public class HealthCheckEndpoint
     {
         var result = await _healthCheckUseCase.Run(_cancellationToken);
 
-        if (result.IsSuccess)
+        if (result.Failed(out var error))
         {
-            _logger.LogTrace("Healthy!");
-            return CreateJsonResponse(
-                new HealthCheckEndpointResponse("Healthy!"), HttpStatusCode.OK);
+            return HandleFailure(error, _logger);
         }
 
-        return HandleFailure(result.Error!, _logger);
+        _logger.LogTrace("Healthy!");
+        return CreateJsonResponse(
+            new HealthCheckEndpointResponse("Healthy!"), HttpStatusCode.OK);
     }
 
     private static IResult HandleFailure(Error error, ILogger logger)
     {
         // UnexpectedError is a "patch me" signal: log it loudly.
-        if (error is UnhandledExceptionError unexpectedError)
+        if (error.TryGetExact<UnhandledExceptionError>(out var unexpectedError))
         {
             logger.LogError(
                 unexpectedError.Exception,
