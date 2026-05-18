@@ -4,132 +4,333 @@ namespace Shared.UnitTests.ResultPattern;
 
 public class ResultTests
 {
+    private sealed record TestError(string Reason);
+
+    // --- Factory: Success ---
+
     [Fact]
-    public void Result_Success_ShouldHaveSuccessState()
+    public void Success_ShouldCreateSuccessfulResult_WithValue()
     {
-        var result = Result.Success();
+        var result = Result<int, TestError>.Success(42);
 
         Assert.True(result.IsSuccess);
         Assert.False(result.IsFailure);
-        Assert.True(result.Succeeded());
-        Assert.False(result.Failed());
-
-        Assert.False(result.Failed(out var error));
-        Assert.Null(error);
-        Assert.Null(result.Error);
-    }
-
-    [Fact]
-    public void Result_Failure_ShouldHaveFailureState()
-    {
-        var error = new Error(code: "test.error", message: "failed");
-
-        var result = Result.Failure(error);
-
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
-        Assert.False(result.Succeeded());
-        Assert.True(result.Failed());
-
-        Assert.True(result.Failed(out var found));
-        Assert.Same(error, found);
-        Assert.Same(error, result.Error);
-    }
-
-    [Fact]
-    public void Result_Failure_ShouldThrow_WhenErrorNull()
-    {
-        Action act = static () => Result.Failure(null!);
-
-        var ex = Assert.Throws<ArgumentNullException>(act);
-
-        Assert.Equal("error", ex.ParamName);
-    }
-
-    [Fact]
-    public void Result_GenericSuccess_ShouldReturnValueAndHasValue()
-    {
-        var result = Result.Success(42);
-
-        Assert.True(result.IsSuccess);
-        Assert.False(result.IsFailure);
-        Assert.True(result.Succeeded());
         Assert.Equal(42, result.Value);
-        Assert.True(result.HasValue);
         Assert.Null(result.Error);
-
-        Assert.True(result.Succeeded(out var value));
-        Assert.Equal(42, value);
-        Assert.True(result.TryGetValue(out var strictValue));
-        Assert.Equal(42, strictValue);
-        Assert.False(result.Failed());
     }
 
     [Fact]
-    public void Result_GenericSuccess_WithNoValue_ShouldHaveNoValue()
+    public void Success_ShouldThrow_WhenValueIsNull()
     {
-        var result = Result<int?>.Success();
-
-        Assert.True(result.IsSuccess);
-        Assert.False(result.IsFailure);
-        Assert.Null(result.Value);
-        Assert.False(result.HasValue);
-
-        Assert.True(result.Succeeded(out var value));
-        Assert.Null(value);
-        Assert.False(result.TryGetValue(out var strictValue));
-        Assert.Null(strictValue);
-        Assert.False(result.Failed());
-    }
-
-    [Fact]
-    public void Result_GenericFailure_ShouldHaveFailureState()
-    {
-        var error = new Error(code: "test.error", message: "failed");
-
-        var result = Result.Failure<int>(error);
-
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
-        Assert.False(result.HasValue);
-        Assert.Same(error, result.Error);
-
-        Assert.True(result.Failed(out var found));
-        Assert.Same(error, found);
-        Assert.False(result.Succeeded());
-        Assert.False(result.TryGetValue(out var value));
-        Assert.Equal(default, value);
-    }
-
-    [Fact]
-    public void Result_GenericSuccess_ShouldThrow_WhenValueNull()
-    {
-        Action act = static () => Result<string>.Success(null!);
-
-        var ex = Assert.Throws<ArgumentNullException>(act);
+        var ex = Assert.Throws<ArgumentNullException>(
+            () => Result<string, TestError>.Success(null!));
 
         Assert.Equal("value", ex.ParamName);
     }
 
     [Fact]
-    public void Result_GenericFailure_ShouldThrow_WhenErrorNull()
+    public void Success_ShouldAcceptUnit()
     {
-        Action act = static () => Result<string>.Failure(null!);
+        var result = Result<Unit, TestError>.Success(default);
 
-        var ex = Assert.Throws<ArgumentNullException>(act);
+        Assert.True(result.IsSuccess);
+        Assert.Null(result.Error);
+    }
+
+    // --- Factory: Failure ---
+
+    [Fact]
+    public void Failure_ShouldCreateFailedResult_WithError()
+    {
+        var error = new TestError("oops");
+
+        var result = Result<int, TestError>.Failure(error);
+
+        Assert.False(result.IsSuccess);
+        Assert.True(result.IsFailure);
+        Assert.Same(error, result.Error);
+        Assert.Equal(0, result.Value); // default(int)
+    }
+
+    [Fact]
+    public void Failure_ShouldThrow_WhenErrorIsNull()
+    {
+        var ex = Assert.Throws<ArgumentNullException>(
+            () => Result<int, TestError>.Failure(null!));
 
         Assert.Equal("error", ex.ParamName);
     }
 
+    // --- Consumption: Succeeded ---
+
     [Fact]
-    public void Result_WithExpression_ShouldClone()
+    public void Succeeded_ShouldReturnTrue_OnSuccess()
     {
-        var original = Result.Success();
+        var result = Result<int, TestError>.Success(7);
 
-        var clone = original with { };
+        Assert.True(result.Succeeded());
+    }
 
-        Assert.NotSame(original, clone);
-        Assert.True(clone.IsSuccess);
-        Assert.Null(clone.Error);
+    [Fact]
+    public void Succeeded_ShouldReturnFalse_OnFailure()
+    {
+        var result = Result<int, TestError>.Failure(new TestError("x"));
+
+        Assert.False(result.Succeeded());
+    }
+
+    [Fact]
+    public void Succeeded_WithOut_ShouldOutputValue_OnSuccess()
+    {
+        var result = Result<string, TestError>.Success("hello");
+
+        Assert.True(result.Succeeded(out var value));
+        Assert.Equal("hello", value);
+    }
+
+    [Fact]
+    public void Succeeded_WithOut_ShouldOutputDefault_OnFailure()
+    {
+        var result = Result<string, TestError>.Failure(new TestError("x"));
+
+        Assert.False(result.Succeeded(out var value));
+        Assert.Null(value);
+    }
+
+    // --- Consumption: Failed ---
+
+    [Fact]
+    public void Failed_ShouldReturnTrue_OnFailure()
+    {
+        var result = Result<int, TestError>.Failure(new TestError("x"));
+
+        Assert.True(result.Failed());
+    }
+
+    [Fact]
+    public void Failed_ShouldReturnFalse_OnSuccess()
+    {
+        var result = Result<int, TestError>.Success(1);
+
+        Assert.False(result.Failed());
+    }
+
+    [Fact]
+    public void Failed_WithOut_ShouldOutputError_OnFailure()
+    {
+        var error = new TestError("kaboom");
+        var result = Result<int, TestError>.Failure(error);
+
+        Assert.True(result.Failed(out var captured));
+        Assert.Same(error, captured);
+    }
+
+    [Fact]
+    public void Failed_WithOut_ShouldOutputNull_OnSuccess()
+    {
+        var result = Result<int, TestError>.Success(1);
+
+        Assert.False(result.Failed(out var captured));
+        Assert.Null(captured);
+    }
+
+    // --- Implicit conversions ---
+
+    [Fact]
+    public void ImplicitConversion_FromValue_ShouldWrapAsSuccess()
+    {
+        Result<int, TestError> result = 99;
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(99, result.Value);
+    }
+
+    [Fact]
+    public void ImplicitConversion_FromError_ShouldWrapAsFailure()
+    {
+        var error = new TestError("nope");
+
+        Result<int, TestError> result = error;
+
+        Assert.True(result.IsFailure);
+        Assert.Same(error, result.Error);
+    }
+
+    // --- Match (Func) ---
+
+    [Fact]
+    public void Match_Func_ShouldInvokeSuccessBranch_OnSuccess()
+    {
+        var result = Result<int, TestError>.Success(10);
+
+        var output = result.Match(
+            success: v => $"ok:{v}",
+            failure: e => $"fail:{e.Reason}");
+
+        Assert.Equal("ok:10", output);
+    }
+
+    [Fact]
+    public void Match_Func_ShouldInvokeFailureBranch_OnFailure()
+    {
+        var result = Result<int, TestError>.Failure(new TestError("bad"));
+
+        var output = result.Match(
+            success: v => $"ok:{v}",
+            failure: e => $"fail:{e.Reason}");
+
+        Assert.Equal("fail:bad", output);
+    }
+
+    // --- Match (Action) ---
+
+    [Fact]
+    public void Match_Action_ShouldInvokeSuccessAction_OnSuccess()
+    {
+        var result = Result<int, TestError>.Success(5);
+        var successCalled = false;
+        var failureCalled = false;
+
+        result.Match(
+            success: _ => successCalled = true,
+            failure: _ => failureCalled = true);
+
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+    }
+
+    [Fact]
+    public void Match_Action_ShouldInvokeFailureAction_OnFailure()
+    {
+        var result = Result<int, TestError>.Failure(new TestError("x"));
+        var successCalled = false;
+        var failureCalled = false;
+
+        result.Match(
+            success: _ => successCalled = true,
+            failure: _ => failureCalled = true);
+
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+    }
+
+    // --- Map ---
+
+    [Fact]
+    public void Map_ShouldTransformValue_OnSuccess()
+    {
+        var result = Result<int, TestError>.Success(3);
+
+        var mapped = result.Map(v => v * 2);
+
+        Assert.True(mapped.IsSuccess);
+        Assert.Equal(6, mapped.Value);
+    }
+
+    [Fact]
+    public void Map_ShouldPassErrorThrough_OnFailure()
+    {
+        var error = new TestError("untouched");
+        var result = Result<int, TestError>.Failure(error);
+        var transformCalled = false;
+
+        var mapped = result.Map(v => { transformCalled = true; return v * 2; });
+
+        Assert.True(mapped.IsFailure);
+        Assert.Same(error, mapped.Error);
+        Assert.False(transformCalled);
+    }
+
+    // --- Then ---
+
+    [Fact]
+    public void Then_ShouldChain_OnSuccess()
+    {
+        var result = Result<int, TestError>.Success(4);
+
+        var chained = result.Then(v => Result<string, TestError>.Success($"val:{v}"));
+
+        Assert.True(chained.IsSuccess);
+        Assert.Equal("val:4", chained.Value);
+    }
+
+    [Fact]
+    public void Then_ShouldShortCircuit_OnFailure()
+    {
+        var error = new TestError("stop");
+        var result = Result<int, TestError>.Failure(error);
+        var nextCalled = false;
+
+        var chained = result.Then(v =>
+        {
+            nextCalled = true;
+            return Result<string, TestError>.Success("never");
+        });
+
+        Assert.True(chained.IsFailure);
+        Assert.Same(error, chained.Error);
+        Assert.False(nextCalled);
+    }
+
+    [Fact]
+    public void Then_ShouldPropagateFailure_FromNextStep()
+    {
+        var result = Result<int, TestError>.Success(1);
+        var downstreamError = new TestError("downstream");
+
+        var chained = result.Then<string>(v => downstreamError);
+
+        Assert.True(chained.IsFailure);
+        Assert.Same(downstreamError, chained.Error);
+    }
+
+    // --- Static factory: Result.Ok / Result.Fail ---
+
+    [Fact]
+    public void StaticOk_NoArgs_ShouldReturnDefaultUnit()
+    {
+        var unit = Result.Ok();
+
+        Assert.Equal(default, unit);
+    }
+
+    [Fact]
+    public void StaticOk_WithErrorType_ShouldReturnUnitSuccess()
+    {
+        var result = Result.Ok<TestError>();
+
+        Assert.True(result.IsSuccess);
+        Assert.IsType<Result<Unit, TestError>>(result);
+    }
+
+    [Fact]
+    public void StaticOk_WithDataAndErrorType_ShouldReturnDataSuccess()
+    {
+        var result = Result.Ok<int, TestError>(123);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(123, result.Value);
+    }
+
+    [Fact]
+    public void StaticFail_WithErrorType_ShouldReturnUnitFailure()
+    {
+        var error = new TestError("boom");
+
+        var result = Result.Fail<TestError>(error);
+
+        Assert.True(result.IsFailure);
+        Assert.Same(error, result.Error);
+    }
+
+    [Fact]
+    public void StaticFail_WithDataAndErrorType_ShouldReturnTypedFailure()
+    {
+        var error = new TestError("boom");
+
+        var result = Result.Fail<int, TestError>(error);
+
+        Assert.True(result.IsFailure);
+        Assert.Same(error, result.Error);
     }
 }

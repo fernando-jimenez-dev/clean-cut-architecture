@@ -1,4 +1,4 @@
-# **Chapter VI: Q&A – Answering the Big Questions**
+# **Chapter V: Q&A – Answering the Big Questions**
 
 No architecture is complete without addressing the "why," "how," and "what about this scenario?" questions that inevitably arise. This chapter tackles the most common queries about Clean Cut Architecture (CCA), so you can walk away with clarity and confidence.
 

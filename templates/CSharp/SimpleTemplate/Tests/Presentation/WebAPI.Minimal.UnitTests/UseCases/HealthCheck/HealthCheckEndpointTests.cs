@@ -1,9 +1,9 @@
-﻿using Application.UseCases.HealthCheck.Abstractions;
+using Application.UseCases.HealthCheck.Abstractions;
+using Application.UseCases.HealthCheck.Errors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
 using NSubstitute;
-using Shared.Errors;
 using Shared.ResultPattern;
 using System.Net;
 using WebAPI.Minimal.UseCases.HealthCheck;
@@ -27,7 +27,9 @@ public class HealthCheckEndpointTests
     public async Task ShouldReturnOkWhenUseCaseSucceeds()
     {
         // Arrange
-        _healthCheckUseCase.Run(_cancellationToken).Returns(Result.Success());
+        _healthCheckUseCase
+            .Run(_cancellationToken)
+            .Returns(Result.Ok<HealthCheckError>());
 
         // Act
         var endpointResult = await HealthCheckEndpoint.Execute(_healthCheckUseCase, _logger, _cancellationToken);
@@ -45,39 +47,41 @@ public class HealthCheckEndpointTests
     }
 
     [Fact]
-    public async Task ShouldReturn500_AndLogError_WhenUseCaseReturnsUnexpectedError()
+    public async Task ShouldReturn503WhenServiceIsUnreachable()
     {
         // Arrange
-        var exception = new Exception("boom");
-        var unexpectedError = new UnhandledExceptionError(exception);
+        var error = new ServiceUnreachable("Database",
+            Context: ErrorContext.FromException(new Exception("Connection refused"), source: "DbHealthCheck"));
+
         _healthCheckUseCase
             .Run(_cancellationToken)
-            .Returns(Result.Failure(unexpectedError));
+            .Returns(Result<Unit, HealthCheckError>.Failure(error));
 
         // Act
         var endpointResult = await HealthCheckEndpoint.Execute(_healthCheckUseCase, _logger, _cancellationToken);
 
         // Assert response
         var jsonResult = Assert.IsType<JsonHttpResult<HealthCheckEndpointResponse>>(endpointResult);
-        Assert.Equal((int)HttpStatusCode.InternalServerError, jsonResult.StatusCode);
+        Assert.Equal((int)HttpStatusCode.ServiceUnavailable, jsonResult.StatusCode);
         Assert.NotNull(jsonResult.Value);
-        Assert.Equal("Unhealthy.", jsonResult.Value.Message);
+        Assert.Equal("Unhealthy: Database is unreachable.", jsonResult.Value.Message);
 
         // Assert logs
         var errorLog = _logger.Collector.GetSnapshot()[0];
         Assert.Equal(LogLevel.Error, errorLog.Level);
-        Assert.Equal(unexpectedError.Exception, errorLog.Exception);
-        Assert.Equal($"HealthCheck failed with an unhandled exception. Code: {unexpectedError.Code}", errorLog.Message);
+        Assert.Equal("Connection refused", errorLog.Message);
     }
 
     [Fact]
-    public async Task ShouldReturn500_AndLogError_WhenUseCaseReturnsUnknownError()
+    public async Task ShouldReturn500WhenUnhandledExceptionEscaped()
     {
         // Arrange
-        var unknownError = new UnknownError();
+        var exception = new InvalidOperationException("kaboom");
+        var error = new UnhandledException(exception, Context: ErrorContext.FromException(exception));
+
         _healthCheckUseCase
             .Run(_cancellationToken)
-            .Returns(Result.Failure(unknownError));
+            .Returns(Result<Unit, HealthCheckError>.Failure(error));
 
         // Act
         var endpointResult = await HealthCheckEndpoint.Execute(_healthCheckUseCase, _logger, _cancellationToken);
@@ -86,41 +90,12 @@ public class HealthCheckEndpointTests
         var jsonResult = Assert.IsType<JsonHttpResult<HealthCheckEndpointResponse>>(endpointResult);
         Assert.Equal((int)HttpStatusCode.InternalServerError, jsonResult.StatusCode);
         Assert.NotNull(jsonResult.Value);
-        Assert.Equal("Unhealthy.", jsonResult.Value.Message);
+        Assert.Equal("Unhealthy: unexpected failure.", jsonResult.Value.Message);
 
-        // Assert logs
+        // Assert logs — UnhandledException branch captures the exception itself
         var errorLog = _logger.Collector.GetSnapshot()[0];
         Assert.Equal(LogLevel.Error, errorLog.Level);
-        Assert.Equal($"HealthCheck failed with an error not mapped by endpoint. Code: {unknownError.Code}. Message: {unknownError.Message}", errorLog.Message);
+        Assert.Same(exception, errorLog.Exception);
+        Assert.Equal("Unhandled exception in health check", errorLog.Message);
     }
-
-    [Fact]
-    public async Task ShouldReturn500_AndLogUnhandledException_WhenUnknownErrorContainsUnhandledExceptionCause()
-    {
-        // Arrange
-        var exception = new Exception("boom");
-        var unexpectedError = new UnhandledExceptionError(exception);
-        var unknownError = new UnknownError(causes: new List<Error> { unexpectedError });
-        _healthCheckUseCase
-            .Run(_cancellationToken)
-            .Returns(Result.Failure(unknownError));
-
-        // Act
-        var endpointResult = await HealthCheckEndpoint.Execute(_healthCheckUseCase, _logger, _cancellationToken);
-
-        // Assert response
-        var jsonResult = Assert.IsType<JsonHttpResult<HealthCheckEndpointResponse>>(endpointResult);
-        Assert.Equal((int)HttpStatusCode.InternalServerError, jsonResult.StatusCode);
-        Assert.NotNull(jsonResult.Value);
-        Assert.Equal("Unhealthy.", jsonResult.Value.Message);
-
-        // Assert logs
-        var errorLog = _logger.Collector.GetSnapshot()[0];
-        Assert.Equal(LogLevel.Error, errorLog.Level);
-        Assert.Equal(exception, errorLog.Exception);
-        Assert.Equal($"HealthCheck failed with an unhandled exception. Code: {unexpectedError.Code}", errorLog.Message);
-    }
-
-    private sealed record UnknownError(IReadOnlyList<Error>? causes = null)
-        : Error(code: "health.modeled_failure", message: "Modeled failure.", causes: causes);
 }

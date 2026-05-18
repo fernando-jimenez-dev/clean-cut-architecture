@@ -1,215 +1,195 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Shared.ResultPattern;
 
 /// <summary>
-/// Represents the outcome of an operation—either success or failure.
+/// Represents the outcome of an operation — either success with a value, or failure with a typed error.
+///
+/// <para>
+/// Result is a generic container — a box. It has no opinion about what <typeparamref name="TError"/> is.
+/// The only constraint is <c>class</c>, needed so <c>null</c> can represent "no error" (success).
+/// </para>
+///
+/// <para>
+/// Consumers of Result decide whether to add further constraints. For example, the IUseCase
+/// interfaces require <c>TError : IContextualError</c>, guaranteeing that all Use Case errors
+/// can carry optional <see cref="ErrorContext"/>. But a shared repository, HTTP client wrapper,
+/// or utility can use Result freely with any error class — no interface required.
+/// </para>
+///
+/// <para>
+/// For void operations (no data on success), use <c>Result&lt;Unit, TError&gt;</c> and return
+/// <c>Result.Ok</c> — the implicit conversion from <see cref="Unit"/> handles the wrapping.
+/// </para>
+///
+/// <example>
+/// Unit operation (no output):
+/// <code>
+/// public Task&lt;Result&lt;Unit, DeleteUserError&gt;&gt; Run(Guid userId, CancellationToken ct)
+/// {
+///     // ...
+///     return Task.FromResult&lt;Result&lt;Unit, DeleteUserError&gt;&gt;(Result.Ok);
+/// }
+/// </code>
+///
+/// Data operation:
+/// <code>
+/// public Task&lt;Result&lt;CreatedUser, CreateUserError&gt;&gt; Run(CreateUserInput input, CancellationToken ct)
+/// {
+///     // ...
+///     return createdUser; // implicit conversion
+/// }
+/// </code>
+/// </example>
 /// </summary>
-public record Result
+/// <typeparam name="TValue">
+/// The type returned on success. Use <see cref="Unit"/> for operations with no output.
+/// </typeparam>
+/// <typeparam name="TError">
+/// Any reference type representing failure. The box doesn't care what it is —
+/// the constraint lives on whoever uses the box (e.g., IUseCase).
+/// </typeparam>
+public record Result<TValue, TError> where TError : class
 {
-    /// <summary>
-    /// Gets a value indicating whether the operation was successful.
-    /// </summary>
     public bool IsSuccess { get; }
-
-    /// <summary>
-    /// Gets a value indicating whether the operation failed.
-    /// </summary>
     public bool IsFailure => !IsSuccess;
 
-    /// <summary>
-    /// Gets the associated <see cref="Error"/> if the operation failed,
-    /// or <c>null</c> if successful.
-    /// </summary>
-    public Error? Error { get; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Result"/> class.
-    /// Use <see cref="Success"/> or <see cref="Failure"/> instead.
-    /// </summary>
-    /// <param name="error">The error for a failed result, or <c>null</c> for success.</param>
-    private Result(Error? error = null)
-    {
-        IsSuccess = error is null;
-        Error = error;
-    }
-
-    /// <summary>
-    /// Returns <c>true</c> if the operation was successful.
-    /// </summary>
-    public bool Succeeded() => IsSuccess;
-
-    /// <summary>
-    /// Returns <c>true</c> if the operation failed.
-    /// </summary>
-    public bool Failed() => IsFailure;
-
-    /// <summary>
-    /// Returns <c>true</c> if the operation failed, and outputs the associated error.
-    /// </summary>
-    /// <param name="error">The error if failed; otherwise <c>null</c>.</param>
-    public bool Failed([NotNullWhen(true)] out Error? error)
-    {
-        error = Error;
-        return IsFailure;
-    }
-
-    /// <summary>
-    /// Creates a successful result.
-    /// </summary>
-    public static Result Success() => new();
-
-    /// <summary>
-    /// Creates a successful generic result with the specified value.
-    /// </summary>
-    /// <remarks><b>Sugar Syntax</b></remarks>
-    /// <typeparam name="TValue">The result value type.</typeparam>
-    /// <param name="value">The value produced by a successful operation.</param>
-    public static Result<TValue> Success<TValue>(TValue value)
-        => Result<TValue>.Success(value);
-
-    /// <summary>
-    /// Creates a failed result with the specified error.
-    /// </summary>
-    /// <param name="error">The associated error. Must not be <c>null</c>.</param>
-    public static Result Failure(Error error)
-    {
-        ArgumentNullException.ThrowIfNull(error);
-        return new(error);
-    }
-
-    /// <summary>
-    /// Creates a failed generic result with the specified error.
-    /// </summary>
-    /// <remarks><b>Sugar Syntax</b></remarks>
-    /// <typeparam name="TValue">The result value type.</typeparam>
-    /// <param name="error">The associated error. Must not be <c>null</c>.</param>
-    public static Result<TValue> Failure<TValue>(Error error)
-        => Result<TValue>.Failure(error);
-}
-
-/// <summary>
-/// Represents the outcome of an operation—either success (with a value)
-/// or failure (with an error).
-/// </summary>
-/// <typeparam name="TValue">The result value type.</typeparam>
-public record Result<TValue>
-{
-    /// <summary>
-    /// Gets a value indicating whether the operation was successful.
-    /// </summary>
-    public bool IsSuccess { get; }
-
-    /// <summary>
-    /// Gets a value indicating whether the operation failed.
-    /// </summary>
-    public bool IsFailure => !IsSuccess;
-
-    /// <summary>
-    /// Gets the value produced by a successful operation, or <c>default</c> if failed.
-    /// </summary>
+    /// <summary>The value on success, <c>default</c> on failure.</summary>
     public TValue? Value { get; }
 
-    /// <summary>
-    /// Gets the associated <see cref="Error"/> if the operation failed,
-    /// or <c>null</c> if successful.
-    /// </summary>
-    public Error? Error { get; }
+    /// <summary>The error on failure, <c>null</c> on success.</summary>
+    public TError? Error { get; }
 
-    /// <summary>
-    /// Returns <c>true</c> if the result has a value.
-    /// If the operation failed, this will always be <c>false</c>.
-    /// If the operation was successful, this will be <c>true</c> only when a value was provided.
-    /// </summary>
-    public bool HasValue { get; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Result{TValue}"/> class.
-    /// Use <see cref="Success(TValue)"/> or <see cref="Failure(Error)"/> instead.
-    /// </summary>
-    /// <param name="value">The result value, or <c>null</c> if empty, or <c>default</c> if failed.</param>
-    /// <param name="error">The error if failed, or <c>null</c> if successful.</param>
-    /// <param name="hasValue">Whether a value was provided for a successful result.</param>
-    private Result(TValue? value, Error? error, bool hasValue)
+    private Result(TValue? value, TError? error)
     {
         IsSuccess = error is null;
-        Error = error;
         Value = value;
-        HasValue = IsSuccess && hasValue;
+        Error = error;
     }
 
-    /// <summary>
-    /// Returns <c>true</c> if the operation was successful.
-    /// </summary>
+    // --- Consumption ---
+
+    /// <summary>Returns <c>true</c> if the operation succeeded.</summary>
     public bool Succeeded() => IsSuccess;
 
-    /// <summary>
-    /// Returns <c>true</c> if the operation was successful and outputs the value.
-    /// This does not guarantee that a value exists.
-    /// Use <see cref="TryGetValue"/> when a value is required.
-    /// </summary>
-    /// <param name="value">
-    /// The result value if successful; otherwise <c>default</c>.
-    /// </param>
-    public bool Succeeded([MaybeNull] out TValue? value)
+    /// <summary>Returns <c>true</c> if succeeded, outputting the value.</summary>
+    public bool Succeeded([MaybeNullWhen(false)] out TValue? value)
     {
         value = Value;
         return IsSuccess;
     }
 
-    /// <summary>
-    /// Returns <c>true</c> when the operation succeeded and a value exists.
-    /// </summary>
-    /// <param name="value">The result value when available; otherwise <c>default</c>.</param>
-    public bool TryGetValue([NotNullWhen(true)] out TValue? value)
-    {
-        value = Value;
-        return IsSuccess && HasValue;
-    }
-
-    /// <summary>
-    /// Returns <c>true</c> if the operation failed.
-    /// </summary>
+    /// <summary>Returns <c>true</c> if the operation failed.</summary>
     public bool Failed() => IsFailure;
 
-    /// <summary>
-    /// Returns <c>true</c> if the operation failed, and outputs the associated error.
-    /// </summary>
-    /// <param name="error">The error if failed; otherwise <c>null</c>.</param>
-    public bool Failed([NotNullWhen(true)] out Error? error)
+    /// <summary>Returns <c>true</c> if failed, outputting the error for pattern matching.</summary>
+    public bool Failed([NotNullWhen(true)] out TError? error)
     {
         error = Error;
         return IsFailure;
     }
 
-    /// <summary>
-    /// Creates a successful result with the specified value.
-    /// </summary>
-    /// <param name="value">
-    /// The value produced by a successful operation.
-    /// Must not be <c>null</c>.
-    /// </param>
-    public static Result<TValue> Success(TValue value) => new(
-        value ?? throw new ArgumentNullException(
-            nameof(value),
-            "Result<TValue>.Success was called with a null value. Every successful result must provide a non-null value."
-        ),
-        null,
-        true
-    );
+    // --- Functional ---
 
     /// <summary>
-    /// Creates a successful result that does not have a value.
+    /// Applies one of two functions depending on the outcome, returning a unified result.
+    /// Forces exhaustive handling of both branches inline.
     /// </summary>
-    public static Result<TValue> Success() => new(default, null, false);
+    public TResult Match<TResult>(
+        Func<TValue, TResult> success,
+        Func<TError, TResult> failure)
+        => IsSuccess ? success(Value!) : failure(Error!);
+
+    /// <summary>Unit variant of <see cref="Match{TResult}"/> — side-effects only.</summary>
+    public void Match(Action<TValue> success, Action<TError> failure)
+    {
+        if (IsSuccess) success(Value!);
+        else failure(Error!);
+    }
 
     /// <summary>
-    /// Creates a failed result with the specified error.
+    /// Transforms the success value without unwrapping.
+    /// A failed Result passes the error through unchanged.
     /// </summary>
-    /// <param name="error">The associated error. Must not be <c>null</c>.</param>
-    public static Result<TValue> Failure(Error error)
+    public Result<TNew, TError> Map<TNew>(Func<TValue, TNew> transform)
+        => IsSuccess ? Result<TNew, TError>.Success(transform(Value!)) : Error!;
+
+    /// <summary>
+    /// Chains an operation that itself returns a Result.
+    /// A failed Result short-circuits — <paramref name="next"/> is never called.
+    /// </summary>
+    public Result<TNew, TError> Then<TNew>(Func<TValue, Result<TNew, TError>> next)
+        => IsSuccess ? next(Value!) : Error!;
+
+    // --- Factory ---
+
+    public static Result<TValue, TError> Success(TValue value)
+    {
+        if (value is null) throw new ArgumentNullException(nameof(value));
+        return new(value, default);
+    }
+
+    public static Result<TValue, TError> Failure(TError error)
     {
         ArgumentNullException.ThrowIfNull(error);
-        return new(default, error, false);
+        return new(default, error);
     }
+
+    // --- Implicit conversions ---
+
+    /// <summary>
+    /// Return a value directly — implicit conversion wraps it in a successful Result.
+    /// <code>return createdUser;</code>
+    /// </summary>
+    public static implicit operator Result<TValue, TError>(TValue value) => Success(value);
+
+    /// <summary>
+    /// Return an error directly — implicit conversion wraps it in a failed Result.
+    /// <code>return new EmailAlreadyExists(email);</code>
+    /// </summary>
+    public static implicit operator Result<TValue, TError>(TError error) => Failure(error);
+}
+
+/// <summary>
+/// Static factory shorthand for creating Result instances.
+///
+/// <para>
+/// <c>Result.Ok</c> is the void success sentinel — return it directly from methods that return
+/// <c>Result&lt;Unit, TError&gt;</c> and the implicit conversion handles the wrapping.
+/// </para>
+///
+/// <para>
+/// <c>Result.Ok&lt;TError&gt;()</c> and <c>Result.Ok&lt;TData, TError&gt;(data)</c> are explicit
+/// factory alternatives when the implicit conversion can't infer the types (e.g., in test setup).
+/// </para>
+/// </summary>
+public static class Result
+{
+    /// <summary>
+    /// Unit success shorthand — returns <see cref="Unit"/> directly.
+    /// In an async method, the implicit conversion from <c>Unit</c> wraps it in a <c>Result&lt;Unit, TError&gt;</c> automatically.
+    /// <code>
+    /// public async Task&lt;Result&lt;Unit, DeleteUserError&gt;&gt; Run(...) { ...; return Result.Ok(); }
+    /// </code>
+    /// </summary>
+    public static Unit Ok() => default;
+
+    /// <summary>
+    /// Unit success factory with explicit error type — for non-async returns, test setup, and mock returns
+    /// where the implicit conversion can't infer the result type.
+    /// </summary>
+    public static Result<Unit, TError> Ok<TError>() where TError : class
+        => Result<Unit, TError>.Success(default);
+
+    /// <summary>Data success factory.</summary>
+    public static Result<TData, TError> Ok<TData, TError>(TData data) where TError : class
+        => Result<TData, TError>.Success(data);
+
+    /// <summary>Explicit void failure factory.</summary>
+    public static Result<Unit, TError> Fail<TError>(TError error) where TError : class
+        => Result<Unit, TError>.Failure(error);
+
+    /// <summary>Explicit data-typed failure factory — for when the full signature is needed but only an error exists.</summary>
+    public static Result<TData, TError> Fail<TData, TError>(TError error) where TError : class
+        => Result<TData, TError>.Failure(error);
 }

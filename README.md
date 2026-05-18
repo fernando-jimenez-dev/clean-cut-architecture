@@ -107,6 +107,66 @@ Head over to the **[/documentation](/documentation/README.md)** folder to learn 
 
 For now, this repository is a **work in progress**, but feel free to open issues for suggestions or ideas. Contributions will be welcomed in the future.
 
+## **Commit Conventions**
+
+Commits that land on `master` — whether directly or squashed from a pull request — follow [Conventional Commits](https://www.conventionalcommits.org/). Feature branch commits are free-form; they only need to be coherent by the time they reach `master`.
+
+### **Format**
+
+```
+<type>[optional scope]: <short summary>
+
+[optional body — what and why, not how]
+
+[optional footer(s)]
+```
+
+### **Types**
+
+| Type | When |
+|---|---|
+| `feat` | New capability for users of the project (template, library, docs surface) |
+| `fix` | Bug fix |
+| `refactor` | Internal restructure with no external behavior change |
+| `docs` | Documentation only |
+| `test` | Tests only |
+| `chore` | Tooling, build, generated files, repo hygiene |
+| `perf` | Performance change |
+| `style` | Formatting / whitespace only (no code change) |
+| `build` / `ci` | Build system / CI changes |
+
+### **Scope**
+
+Optional. Useful when the change is localized to a clear area — e.g. `feat(template):`, `docs(use-case):`, `refactor(result-pattern):`. Omit it when the change spans multiple areas; a missing scope is better than a vague one.
+
+### **Breaking changes**
+
+Append a `BREAKING CHANGE:` footer or add `!` after the type (e.g. `feat!:`) when the change is not backwards-compatible. The footer form is preferred for anything that warrants explanation.
+
+### **Examples**
+
+Single-line, no body:
+```
+docs(template): add Result API reference to the C# template README
+```
+
+```
+fix(use-case): preserve ErrorContext when wrapping inner causes
+```
+
+With body and breaking-change footer:
+```
+feat: introduce error stratification with two-layer Result/Error model
+
+Replace the legacy Result/Error model with a stratified one: per-Use-Case
+sealed error families (Identity) and an optional ErrorContext (diagnostic
+data). Identity drives control flow, Context drives observability.
+
+BREAKING CHANGE: The legacy Shared.ResultPattern types and shared error
+classes are removed. Consumers must migrate to Result<TValue, TError> and
+declare per-Use-Case sealed error families implementing IContextualError.
+```
+
 ---
 
 <br/>
@@ -115,5 +175,5 @@ For now, this repository is a **work in progress**, but feel free to open issues
    Happy Coding!
 </h3>
 <h6 align="center">
-   <i>0.4.1-alpha</i>
+   <i>0.5.0-beta</i>
 </h6>

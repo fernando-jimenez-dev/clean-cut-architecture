@@ -1,7 +1,6 @@
-﻿using Application.UseCases.HealthCheck.Abstractions;
+using Application.UseCases.HealthCheck.Abstractions;
+using Application.UseCases.HealthCheck.Errors;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Errors;
-using Shared.ResultPattern;
 using System.Net;
 
 namespace WebAPI.Minimal.UseCases.HealthCheck;
@@ -16,7 +15,7 @@ public class HealthCheckEndpoint
     {
         var result = await _healthCheckUseCase.Run(_cancellationToken);
 
-        if (result.Failed(out var error))
+        if (result.Succeeded())
         {
             return HandleFailure(error, _logger);
         }
@@ -26,28 +25,26 @@ public class HealthCheckEndpoint
             new HealthCheckEndpointResponse("Healthy!"), HttpStatusCode.OK);
     }
 
-    private static IResult HandleFailure(Error error, ILogger logger)
-    {
-        // UnexpectedError is a "patch me" signal: log it loudly.
-        if (error.TryGetExact<UnhandledExceptionError>(out var unexpectedError))
+        if (result.Failed(out var error))
         {
-            logger.LogError(
-                unexpectedError.Exception,
-                "HealthCheck failed with an unhandled exception. Code: {Code}",
-                unexpectedError.Code
-            );
-            return CreateErrorResponse("Unhealthy.", HttpStatusCode.InternalServerError);
+            if (error is UnhandledException ue)
+                _logger.LogError(ue.Exception, "Unhandled exception in health check");
+            else
+                _logger.LogError(error.Context?.Message);
+
+            return error switch
+            {
+                ServiceUnreachable e => CreateErrorResponse(
+                    $"Unhealthy: {e.Service} is unreachable.", HttpStatusCode.ServiceUnavailable),
+
+                UnhandledException => CreateErrorResponse(
+                    "Unhealthy: unexpected failure.", HttpStatusCode.InternalServerError),
+
+                _ => CreateErrorResponse(
+                    "Unhealthy.", HttpStatusCode.InternalServerError)
+            };
         }
 
-        // If the use case ever returns a modeled error, map it here.
-        // -----
-
-        // Fallback for unmapped errors.
-        logger.LogError(
-            "HealthCheck failed with an error not mapped by endpoint. Code: {Code}. Message: {Message}",
-            error.Code,
-            error.Message
-        );
         return CreateErrorResponse("Unhealthy.", HttpStatusCode.InternalServerError);
     }
 

@@ -1,4 +1,5 @@
-﻿using Application.UseCases.HealthCheck.Abstractions;
+using Application.UseCases.HealthCheck.Abstractions;
+using Application.UseCases.HealthCheck.Errors;
 using Shared.ResultPattern;
 
 namespace Application.UseCases.HealthCheck;
@@ -9,8 +10,9 @@ namespace Application.UseCases.HealthCheck;
 /// </summary>
 public class HealthCheckUseCase : IHealthCheckUseCase
 {
-    public Task<Result> Run(CancellationToken cancellationToken = default)
+    public async Task<Result<Unit, HealthCheckError>> Run(CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(Result.Success());
+        await Task.CompletedTask;
+        return Result.Ok();
     }
 }
